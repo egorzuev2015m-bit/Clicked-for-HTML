@@ -2,48 +2,28 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кликер - Лидерборд</title>
     <style>
         * {
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
         }
-        
-        html, body {
-            touch-action: manipulation;
-            overscroll-behavior: none;
-            width: 100%;
-            min-height: 100vh;
-        }
-        
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            margin-top: 30px;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: white;
             margin: 0;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
         }
-        
-        button, .click-btn, .upgrade-btn {
-            touch-action: manipulation;
-        }
-        
         .container {
             max-width: 750px;
-            width: 100%;
             margin: 0 auto;
             background: rgba(255,255,255,0.1);
             padding: 20px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
-            box-sizing: border-box;
         }
         .clicks-area {
             background: rgba(0,0,0,0.3);
@@ -73,7 +53,6 @@
             margin: 15px 0;
             transition: transform 0.1s;
             font-weight: bold;
-            touch-action: manipulation;
         }
         .click-btn:active {
             transform: scale(0.96);
@@ -129,7 +108,6 @@
             cursor: pointer;
             color: white;
             font-weight: bold;
-            touch-action: manipulation;
         }
         .divider {
             height: 3px;
@@ -163,7 +141,6 @@
             color: white;
             font-weight: bold;
             margin-top: 8px;
-            touch-action: manipulation;
         }
         .shop-limit {
             font-size: 14px;
@@ -669,11 +646,7 @@
             }
         }
         
-        function handleClick(event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+        function handleClick() {
             let gain = getTotalClickPower();
             clicks += gain;
             updateUI();
@@ -681,7 +654,6 @@
             let btn = document.getElementById('clickBtn');
             btn.style.transform = 'scale(0.95)';
             setTimeout(() => { btn.style.transform = ''; }, 100);
-            return false;
         }
         
         function saveGame() {
@@ -766,20 +738,13 @@
             }
         }
         
-        // Обработчики с предотвращением скролла
-        document.getElementById('clickBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            handleClick(e);
-            return false;
-        });
-        
-        document.getElementById('upgradeBtn').onclick = function(e) { e.preventDefault(); buyNormalUpgrade(); };
-        document.getElementById('superUpgradeBtn').onclick = function(e) { e.preventDefault(); buySuperUpgrade(); };
-        document.getElementById('autoClickerBtn').onclick = function(e) { e.preventDefault(); buyAutoClicker(); };
-        document.getElementById('saveBtn').onclick = function(e) { e.preventDefault(); saveGame(); };
-        document.getElementById('saveLeaderboardBtn').onclick = function(e) { e.preventDefault(); addLeaderboardRecord(); };
-        document.getElementById('clearLeaderboardBtn').onclick = function(e) { e.preventDefault(); clearLeaderboard(); };
+        document.getElementById('clickBtn').onclick = handleClick;
+        document.getElementById('upgradeBtn').onclick = buyNormalUpgrade;
+        document.getElementById('superUpgradeBtn').onclick = buySuperUpgrade;
+        document.getElementById('autoClickerBtn').onclick = buyAutoClicker;
+        document.getElementById('saveBtn').onclick = saveGame;
+        document.getElementById('saveLeaderboardBtn').onclick = addLeaderboardRecord;
+        document.getElementById('clearLeaderboardBtn').onclick = clearLeaderboard;
         document.getElementById('autosaveCheckbox').onchange = (e) => {
             setAutosaveEnabled(e.target.checked);
             localStorage.setItem('autosaveEnabled', e.target.checked);
