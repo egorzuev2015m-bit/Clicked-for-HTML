@@ -6,7 +6,7 @@
 
 ## Играть
 
-[Открыть сайт](https://egorzuev2015m-bit.github.io/Clicked-for-HTML/)
+[Открой сайт и играй!](https://egorzuev2015m-bit.github.io/Clicked-for-HTML/)
 
 ## Механики
 
