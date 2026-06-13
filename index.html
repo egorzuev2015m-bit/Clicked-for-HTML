@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликер</title>
+    <style>
+        * {
+            user-select: none;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 30px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .clicks-area {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .clicks {
+            font-size: 52px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #ffd966;
+        }
+        .click-power {
+            font-size: 22px;
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+        .click-btn {
+            background: #ff6b6b;
+            color: white;
+            font-size: 36px;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            margin: 15px 0;
+            transition: transform 0.1s;
+            font-weight: bold;
+        }
+        .click-btn:active {
+            transform: scale(0.96);
+        }
+        .save-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+        .save-btn {
+            background: #2196f3;
+            color: white;
+            font-size: 18px;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .autosave-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.4);
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .autosave-label input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .upgrade-section {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 1px solid #ff9800;
+        }
+        .upgrade-section h3 {
+            margin: 0 0 10px 0;
+            color: #ff9800;
+        }
+        .upgrade-btn {
+            background: #ff9800;
+            font-size: 20px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .upgrade-btn:active {
+            transform: scale(0.97);
+        }
+        .divider {
+            height: 3px;
+            background: linear-gradient(to right, transparent, white, transparent);
+            margin: 25px 0;
+        }
+        .shop-section {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 1px solid #4caf50;
+        }
+        .shop-section h3 {
+            margin: 0 0 10px 0;
+            color: #4caf50;
+        }
+        .shop-item {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+        }
+        .shop-item button {
+            background: #4caf50;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .shop-item button:active {
+            transform: scale(0.97);
+        }
+        .shop-limit {
+            font-size: 14px;
+            color: #ffd966;
+            margin-top: 5px;
+        }
+        .inventory {
+            margin-top: 20px;
+            font-size: 16px;
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .inventory div {
+            padding: 5px 15px;
+        }
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.5);
+            font-size: 14px;
+        }
+        .error {
+            color: #ff6b6b;
+        }
+        .success {
+            color: #4caf50;
+        }
+        .autoclicker-status {
+            background: #2c3e66;
+            padding: 8px;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #bbdef5;
+        }
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="clicks-area">
+            <div class="clicks">
+                <span id="clickCount">0</span> кликов
+            </div>
+            <div class="click-power">
+                Сила одного клика: +<span id="clickPower">1</span>
+            </div>
+            <button class="click-btn" id="clickBtn">КЛИК</button>
+            <div class="save-area">
+                <button class="save-btn" id="saveBtn">СОХРАНИТЬ</button>
+                <label class="autosave-label">
+                    <input type="checkbox" id="autosaveCheckbox"> Автосохранение
+                </label>
+            </div>
+        </div>
+
+        <div class="upgrade-section">
+            <h3>УЛУЧШЕНИЕ КЛИКА</h3>
+            <div>Каждый апгрейд увеличивает силу клика на +1. Стоимость растёт на +10 после каждой покупки (бесконечно)</div>
+            <div class="upgrade-cost">Стоимость следующего: <span id="upgradeCost">20</span> кликов</div>
+            <button class="upgrade-btn" id="upgradeBtn">КУПИТЬ УЛУЧШЕНИЕ</button>
+            <div style="margin-top: 8px;">Куплено улучшений: <span id="upgradeLevel">0</span></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="shop-section">
+            <h3>МАГАЗИН</h3>
+            <div class="shop-item">
+                <div style="font-size: 22px; font-weight: bold;">Улучшенный клик x2</div>
+                <div>Умножает силу клика на 2 (действует поверх обычных улучшений)</div>
+                <div>Стоимость: <span id="superUpgradeCost">10K</span> кликов</div>
+                <div class="shop-limit">Доступно покупок: <span id="superUpgradeRemaining">50</span> / 50</div>
+                <button id="superUpgradeBtn">КУПИТЬ X2 УЛУЧШЕНИЕ</button>
+                <div style="margin-top: 8px;">Текущий множитель: x<span id="superMultiplier">1</span></div>
+            </div>
+            <div class="shop-item">
+                <div style="font-size: 22px; font-weight: bold;">АВТОКЛИКЕР</div>
+                <div>Автоматически кликает 1 раз в секунду в течение 20 минут</div>
+                <div>Стоимость: 10B кликов</div>
+                <button id="autoClickerBtn">КУПИТЬ АВТОКЛИКЕР (20 мин)</button>
+                <div class="autoclicker-status" id="autoClickerStatus">
+                    Автокликер неактивен
+                </div>
+            </div>
+        </div>
+
+        <div class="inventory">
+            <div>Обычных улучшений: <span id="normalUpgradeCount">0</span></div>
+            <div>X2 улучшений: <span id="superUpgradeCount">0</span></div>
+            <div>Множитель: x<span id="totalMultiplier">1</span></div>
+        </div>
+
+        <div class="message" id="message">
+            Нажми КЛИК чтобы начать. Обычное улучшение дорожает на 10 после каждой покупки (бесконечно).
+        </div>
+    </div>
+
+    <script>
+        function formatNumber(num) {
+            if (num < 1000) return Math.floor(num).toString();
+            const units = ['K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
+            let unitIndex = -1;
+            let value = num;
+            while (value >= 1000 && unitIndex < units.length - 1) {
+                value /= 1000;
+                unitIndex++;
+            }
+            if (value >= 100) return Math.floor(value) + units[unitIndex];
+            if (value >= 10) return value.toFixed(1) + units[unitIndex];
+            return value.toFixed(2) + units[unitIndex];
+        }
+
+        let clicks = 0;
+        let normalUpgrade = 0;
+        let superUpgrade = 0;
+        let autosaveInterval = null;
+        let autosaveEnabled = false;
+        let autoClickerInterval = null;
+        let autoClickerEndTime = 0;
+        
+        function getNormalUpgradeCost() {
+            return 20 + (normalUpgrade * 10);
+        }
+        
+        const SUPER_BASE_COST = 10000;
+        const SUPER_COST_INCREMENT = 10000000;
+        const MAX_SUPER_UPGRADE = 50;
+        const AUTOSAVE_INTERVAL_MS = 10000;
+        const AUTO_CLICKER_COST = 10000000000;
+        const AUTO_CLICKER_DURATION_SEC = 1200;
+        
+        function getSuperUpgradeCost() {
+            return SUPER_BASE_COST + (superUpgrade * SUPER_COST_INCREMENT);
+        }
+        
+        function getTotalClickPower() {
+            let basePower = 1 + normalUpgrade;
+            let multiplier = Math.pow(2, superUpgrade);
+            if (multiplier > 1e15) multiplier = 1e15;
+            return basePower * multiplier;
+        }
+        
+        function updateUI() {
+            document.getElementById('clickCount').textContent = formatNumber(clicks);
+            let totalPower = getTotalClickPower();
+            if (totalPower < 10000) {
+                document.getElementById('clickPower').textContent = totalPower;
+            } else {
+                document.getElementById('clickPower').textContent = formatNumber(totalPower);
+            }
+            document.getElementById('upgradeLevel').textContent = normalUpgrade;
+            document.getElementById('normalUpgradeCount').textContent = normalUpgrade;
+            document.getElementById('upgradeCost').textContent = formatNumber(getNormalUpgradeCost());
+            document.getElementById('superUpgradeCount').textContent = superUpgrade;
+            document.getElementById('superMultiplier').textContent = Math.pow(2, superUpgrade);
+            document.getElementById('superUpgradeRemaining').textContent = MAX_SUPER_UPGRADE - superUpgrade;
+            document.getElementById('totalMultiplier').textContent = Math.pow(2, superUpgrade) * (1 + normalUpgrade);
+            document.getElementById('superUpgradeCost').textContent = formatNumber(getSuperUpgradeCost());
+            
+            if (autoClickerEndTime > Date.now()) {
+                let secondsLeft = Math.ceil((autoClickerEndTime - Date.now()) / 1000);
+                let minutes = Math.floor(secondsLeft / 60);
+                let secs = secondsLeft % 60;
+                document.getElementById('autoClickerStatus').innerHTML = `Автокликер активен: ${minutes} мин ${secs} сек`;
+            } else {
+                if (autoClickerInterval) {
+                    clearInterval(autoClickerInterval);
+                    autoClickerInterval = null;
+                }
+                document.getElementById('autoClickerStatus').innerHTML = `Автокликер неактивен`;
+            }
+        }
+        
+        function showMessage(text, type) {
+            let msgDiv = document.getElementById('message');
+            msgDiv.innerHTML = text;
+            msgDiv.className = 'message ' + type;
+            setTimeout(() => {
+                if (msgDiv.innerHTML === text) {
+                    msgDiv.innerHTML = 'Нажми КЛИК чтобы начать. Обычное улучшение дорожает на 10 после каждой покупки (бесконечно).';
+                    msgDiv.className = 'message';
+                }
+            }, 2500);
+        }
+        
+        function startAutoClicker(durationSec) {
+            if (autoClickerInterval) {
+                autoClickerEndTime += durationSec * 1000;
+            } else {
+                autoClickerEndTime = Date.now() + durationSec * 1000;
+                autoClickerInterval = setInterval(() => {
+                    if (Date.now() >= autoClickerEndTime) {
+                        clearInterval(autoClickerInterval);
+                        autoClickerInterval = null;
+                        updateUI();
+                        showMessage("Автокликер закончил работу.", "success");
+                    } else {
+                        clicks += getTotalClickPower();
+                        updateUI();
+                    }
+                }, 1000);
+            }
+            updateUI();
+        }
+        
+        function buyAutoClicker() {
+            if (clicks >= AUTO_CLICKER_COST) {
+                clicks -= AUTO_CLICKER_COST;
+                startAutoClicker(AUTO_CLICKER_DURATION_SEC);
+                updateUI();
+                showMessage(`Куплен автокликер на 20 минут!`, "success");
+            } else {
+                showMessage(`Не хватает кликов! Нужно ${formatNumber(AUTO_CLICKER_COST)}`, "error");
+            }
+        }
+        
+        function buyNormalUpgrade() {
+            let cost = getNormalUpgradeCost();
+            if (clicks >= cost) {
+                clicks -= cost;
+                normalUpgrade++;
+                updateUI();
+                showMessage(`Куплено улучшение! Сила клика выросла до ${getTotalClickPower()}`, "success");
+            } else {
+                showMessage(`Не хватает кликов! Нужно ${formatNumber(cost)}`, "error");
+            }
+        }
+        
+        function buySuperUpgrade() {
+            if (superUpgrade >= MAX_SUPER_UPGRADE) {
+                showMessage(`Достигнут лимит! Можно купить только ${MAX_SUPER_UPGRADE} раз.`, "error");
+                return;
+            }
+            let currentCost = getSuperUpgradeCost();
+            if (clicks >= currentCost) {
+                clicks -= currentCost;
+                superUpgrade++;
+                updateUI();
+                showMessage(`Куплено X2 улучшение! Множитель x${Math.pow(2, superUpgrade)}. Осталось ${MAX_SUPER_UPGRADE - superUpgrade} покупок.`, "success");
+            } else {
+                showMessage(`Не хватает кликов! Нужно ${formatNumber(currentCost)} кликов.`, "error");
+            }
+        }
+        
+        function handleClick() {
+            let gain = getTotalClickPower();
+            clicks += gain;
+            updateUI();
+            let btn = document.getElementById('clickBtn');
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => { btn.style.transform = ''; }, 100);
+        }
+        
+        function saveGame() {
+            const saveData = {
+                clicks: Math.floor(clicks),
+                normalUpgrade: normalUpgrade,
+                superUpgrade: superUpgrade,
+                autoClickerEndTime: autoClickerEndTime
+            };
+            localStorage.setItem('clickerSave', JSON.stringify(saveData));
+            showMessage('Игра сохранена!', 'success');
+        }
+        
+        function loadGame() {
+            const saved = localStorage.getItem('clickerSave');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    clicks = (typeof data.clicks === 'number' && data.clicks >= 0) ? Math.floor(data.clicks) : 0;
+                    normalUpgrade = (typeof data.normalUpgrade === 'number' && data.normalUpgrade >= 0) ? Math.floor(data.normalUpgrade) : 0;
+                    superUpgrade = (typeof data.superUpgrade === 'number' && data.superUpgrade >= 0) ? Math.floor(data.superUpgrade) : 0;
+                    if (superUpgrade > MAX_SUPER_UPGRADE) superUpgrade = MAX_SUPER_UPGRADE;
+                    
+                    if (data.autoClickerEndTime && data.autoClickerEndTime > Date.now()) {
+                        autoClickerEndTime = data.autoClickerEndTime;
+                        if (autoClickerInterval) clearInterval(autoClickerInterval);
+                        autoClickerInterval = setInterval(() => {
+                            if (Date.now() >= autoClickerEndTime) {
+                                clearInterval(autoClickerInterval);
+                                autoClickerInterval = null;
+                                updateUI();
+                            } else {
+                                clicks += getTotalClickPower();
+                                updateUI();
+                            }
+                        }, 1000);
+                    }
+                    updateUI();
+                } catch(e) {
+                    clicks = 0;
+                    normalUpgrade = 0;
+                    superUpgrade = 0;
+                    updateUI();
+                }
+            }
+        }
+        
+        function startAutosave() {
+            if (autosaveInterval) clearInterval(autosaveInterval);
+            if (autosaveEnabled) {
+                autosaveInterval = setInterval(() => {
+                    localStorage.setItem('clickerSave', JSON.stringify({
+                        clicks: Math.floor(clicks),
+                        normalUpgrade: normalUpgrade,
+                        superUpgrade: superUpgrade,
+                        autoClickerEndTime: autoClickerEndTime
+                    }));
+                }, AUTOSAVE_INTERVAL_MS);
+            }
+        }
+        
+        function setAutosaveEnabled(enabled) {
+            autosaveEnabled = enabled;
+            if (enabled) {
+                startAutosave();
+                showMessage('Автосохранение включено', 'success');
+            } else {
+                if (autosaveInterval) clearInterval(autosaveInterval);
+                autosaveInterval = null;
+                showMessage('Автосохранение выключено', 'success');
+            }
+        }
+        
+        document.getElementById('clickBtn').onclick = handleClick;
+        document.getElementById('upgradeBtn').onclick = buyNormalUpgrade;
+        document.getElementById('superUpgradeBtn').onclick = buySuperUpgrade;
+        document.getElementById('autoClickerBtn').onclick = buyAutoClicker;
+        document.getElementById('saveBtn').onclick = saveGame;
+        document.getElementById('autosaveCheckbox').onchange = (e) => {
+            setAutosaveEnabled(e.target.checked);
+            localStorage.setItem('autosaveEnabled', e.target.checked);
+        };
+        
+        loadGame();
+        let savedState = localStorage.getItem('autosaveEnabled');
+        if (savedState === 'true') {
+            document.getElementById('autosaveCheckbox').checked = true;
+            setAutosaveEnabled(true);
+        } else {
+            document.getElementById('autosaveCheckbox').checked = false;
+            setAutosaveEnabled(false);
+        }
+        
+        setInterval(() => {
+            let corrupted = false;
+            if (isNaN(clicks) || clicks < 0) { clicks = 0; corrupted = true; }
+            if (isNaN(normalUpgrade) || normalUpgrade < 0) { normalUpgrade = 0; corrupted = true; }
+            if (isNaN(superUpgrade) || superUpgrade < 0) { superUpgrade = 0; corrupted = true; }
+            if (superUpgrade > MAX_SUPER_UPGRADE) { superUpgrade = MAX_SUPER_UPGRADE; corrupted = true; }
+            if (corrupted) {
+                updateUI();
+                showMessage('Обнаружены некорректные данные. Значения восстановлены.', 'error');
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
