@@ -2,46 +2,68 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кликер - Лидерборд</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Кликер - Анимация и звук</title>
     <style>
         * {
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
+        
+        html, body {
+            touch-action: manipulation;
+            overscroll-behavior: none;
+        }
+        
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 30px;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: white;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
+        
+        button, .click-btn, .upgrade-btn {
+            touch-action: manipulation;
+        }
+        
         .container {
             max-width: 750px;
-            margin: 0 auto;
+            width: 90%;
+            margin: 20px auto;
             background: rgba(255,255,255,0.1);
             padding: 20px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
+            box-sizing: border-box;
         }
+        
         .clicks-area {
             background: rgba(0,0,0,0.3);
             padding: 15px;
             border-radius: 15px;
             margin-bottom: 20px;
+            position: relative;
         }
+        
         .clicks {
             font-size: 52px;
             font-weight: bold;
             margin: 10px 0;
             color: #ffd966;
         }
+        
         .click-power {
             font-size: 22px;
             color: #4caf50;
             margin-bottom: 10px;
         }
+        
         .click-btn {
             background: #ff6b6b;
             color: white;
@@ -53,10 +75,43 @@
             margin: 15px 0;
             transition: transform 0.1s;
             font-weight: bold;
+            touch-action: manipulation;
+            position: relative;
+            overflow: visible;
         }
+        
         .click-btn:active {
             transform: scale(0.96);
         }
+        
+        /* Анимация всплывающих чисел */
+        .floating-number {
+            position: fixed;
+            font-size: 28px;
+            font-weight: bold;
+            color: #4caf50;
+            text-shadow: 0 0 5px #000;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatUp 0.8s ease-out forwards;
+            white-space: nowrap;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0px) scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-40px) scale(1.1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0.5);
+            }
+        }
+        
         .save-area {
             display: flex;
             justify-content: center;
@@ -65,6 +120,7 @@
             margin: 10px 0;
             flex-wrap: wrap;
         }
+        
         .save-btn {
             background: #2196f3;
             color: white;
@@ -74,6 +130,7 @@
             border-radius: 30px;
             cursor: pointer;
         }
+        
         .autosave-label {
             display: flex;
             align-items: center;
@@ -83,11 +140,13 @@
             border-radius: 30px;
             cursor: pointer;
         }
+        
         .autosave-label input {
             width: 18px;
             height: 18px;
             cursor: pointer;
         }
+        
         .upgrade-section {
             background: rgba(0,0,0,0.5);
             padding: 15px;
@@ -95,10 +154,12 @@
             margin: 15px 0;
             border: 1px solid #ff9800;
         }
+        
         .upgrade-section h3 {
             margin: 0 0 10px 0;
             color: #ff9800;
         }
+        
         .upgrade-btn {
             background: #ff9800;
             font-size: 20px;
@@ -108,12 +169,15 @@
             cursor: pointer;
             color: white;
             font-weight: bold;
+            touch-action: manipulation;
         }
+        
         .divider {
             height: 3px;
             background: linear-gradient(to right, transparent, white, transparent);
             margin: 25px 0;
         }
+        
         .shop-section {
             background: rgba(0,0,0,0.5);
             padding: 15px;
@@ -121,16 +185,19 @@
             margin: 15px 0;
             border: 1px solid #4caf50;
         }
+        
         .shop-section h3 {
             margin: 0 0 10px 0;
             color: #4caf50;
         }
+        
         .shop-item {
             background: rgba(0,0,0,0.4);
             padding: 15px;
             border-radius: 15px;
             margin: 10px 0;
         }
+        
         .shop-item button {
             background: #4caf50;
             font-size: 18px;
@@ -141,45 +208,55 @@
             color: white;
             font-weight: bold;
             margin-top: 8px;
+            touch-action: manipulation;
         }
+        
         .shop-limit {
             font-size: 14px;
             color: #ffd966;
             margin-top: 5px;
         }
+        
         .leaderboard-area {
             background: rgba(0,0,0,0.5);
             padding: 15px;
             border-radius: 15px;
             margin: 20px 0;
         }
+        
         .leaderboard-area h3 {
             margin: 0 0 10px 0;
             text-align: center;
             color: #ffd966;
         }
+        
         .leaderboard-list {
             text-align: left;
             max-height: 250px;
             overflow-y: auto;
         }
+        
         .leaderboard-item {
             display: flex;
             justify-content: space-between;
             padding: 8px 12px;
             border-bottom: 1px solid rgba(255,255,255,0.2);
         }
+        
         .leaderboard-rank {
             font-weight: bold;
             color: #ffd966;
             width: 40px;
         }
+        
         .leaderboard-name {
             flex: 1;
         }
+        
         .leaderboard-score {
             color: #4caf50;
         }
+        
         .leaderboard-input-area {
             display: flex;
             justify-content: center;
@@ -187,18 +264,22 @@
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
+        
         .name-input {
             padding: 10px;
             border-radius: 10px;
             border: none;
             width: 150px;
         }
+        
         .save-record-btn {
             background: #4caf50;
         }
+        
         .clear-btn {
             background: #f44336;
         }
+        
         .achievements {
             margin-top: 20px;
             background: rgba(0,0,0,0.5);
@@ -206,11 +287,13 @@
             border-radius: 15px;
             text-align: left;
         }
+        
         .achievements h3 {
             margin: 0 0 10px 0;
             text-align: center;
             color: #ffd966;
         }
+        
         .achievement {
             background: rgba(0,0,0,0.4);
             padding: 8px 12px;
@@ -220,22 +303,27 @@
             justify-content: space-between;
             align-items: center;
         }
+        
         .achievement-name {
             font-weight: bold;
         }
+        
         .achievement-status {
             font-size: 12px;
             padding: 2px 8px;
             border-radius: 20px;
         }
+        
         .locked {
             background: #555;
             color: #aaa;
         }
+        
         .unlocked {
             background: #4caf50;
             color: white;
         }
+        
         .inventory {
             margin-top: 15px;
             font-size: 14px;
@@ -246,6 +334,7 @@
             justify-content: space-around;
             flex-wrap: wrap;
         }
+        
         .message {
             margin-top: 20px;
             padding: 10px;
@@ -253,12 +342,15 @@
             background: rgba(0,0,0,0.5);
             font-size: 14px;
         }
+        
         .error {
             color: #ff6b6b;
         }
+        
         .success {
             color: #4caf50;
         }
+        
         .autoclicker-status {
             background: #2c3e66;
             padding: 8px;
@@ -267,7 +359,25 @@
             margin-top: 10px;
             color: #bbdef5;
         }
+        
         button {
+            cursor: pointer;
+        }
+        
+        /* Переключатель звука */
+        .sound-toggle {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0,0,0,0.4);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 14px;
+        }
+        
+        .sound-toggle input {
+            width: 16px;
+            height: 16px;
             cursor: pointer;
         }
     </style>
@@ -286,6 +396,9 @@
                 <button class="save-btn" id="saveBtn">СОХРАНИТЬ</button>
                 <label class="autosave-label">
                     <input type="checkbox" id="autosaveCheckbox"> Автосохранение
+                </label>
+                <label class="sound-toggle">
+                    🔊 <input type="checkbox" id="soundCheckbox" checked> Звук
                 </label>
             </div>
         </div>
@@ -360,6 +473,51 @@
     </div>
 
     <script>
+        // ========== ЗВУК ==========
+        let audioCtx = null;
+        let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
+        
+        function initAudio() {
+            if (!audioCtx && soundEnabled) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        function playClickSound() {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (audioCtx) {
+                    const oscillator = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    oscillator.frequency.value = 800;
+                    gainNode.gain.value = 0.1;
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+                    oscillator.stop(audioCtx.currentTime + 0.3);
+                }
+            } catch(e) { console.log('звук не работает'); }
+        }
+        
+        // Активация звука после первого касания
+        document.body.addEventListener('touchstart', function() {
+            initAudio();
+        }, { once: true });
+        
+        // ========== АНИМАЦИЯ ЦИФР ==========
+        function showFloatingNumber(x, y, value) {
+            const formattedValue = formatNumber(value);
+            const div = document.createElement('div');
+            div.className = 'floating-number';
+            div.textContent = '+' + formattedValue;
+            div.style.left = (x - 30) + 'px';
+            div.style.top = (y - 30) + 'px';
+            document.body.appendChild(div);
+            setTimeout(() => { div.remove(); }, 800);
+        }
+        
         function formatNumber(num) {
             if (num < 1000) return Math.floor(num).toString();
             const units = ['K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
@@ -597,9 +755,15 @@
                         updateUI();
                         showMessage("Автокликер закончил работу.", "success");
                     } else {
-                        clicks += getTotalClickPower();
+                        let gain = getTotalClickPower();
+                        clicks += gain;
                         updateUI();
                         checkAchievements();
+                        // Анимация для автокликера (опционально)
+                        const btn = document.getElementById('clickBtn');
+                        const rect = btn.getBoundingClientRect();
+                        showFloatingNumber(rect.left + rect.width/2, rect.top + rect.height/2, gain);
+                        playClickSound();
                     }
                 }, 1000);
             }
@@ -646,14 +810,30 @@
             }
         }
         
-        function handleClick() {
+        function handleClick(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             let gain = getTotalClickPower();
             clicks += gain;
             updateUI();
             checkAchievements();
-            let btn = document.getElementById('clickBtn');
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => { btn.style.transform = ''; }, 100);
+            
+            // Анимация всплывающего числа
+            const btn = document.getElementById('clickBtn');
+            const rect = btn.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            showFloatingNumber(x, y, gain);
+            
+            // Звук
+            playClickSound();
+            
+            let btnElem = document.getElementById('clickBtn');
+            btnElem.style.transform = 'scale(0.95)';
+            setTimeout(() => { btnElem.style.transform = ''; }, 100);
+            return false;
         }
         
         function saveGame() {
@@ -690,9 +870,13 @@
                                 autoClickerInterval = null;
                                 updateUI();
                             } else {
-                                clicks += getTotalClickPower();
+                                let gain = getTotalClickPower();
+                                clicks += gain;
                                 updateUI();
                                 checkAchievements();
+                                const btn = document.getElementById('clickBtn');
+                                const rect = btn.getBoundingClientRect();
+                                showFloatingNumber(rect.left + rect.width/2, rect.top + rect.height/2, gain);
                             }
                         }, 1000);
                     }
@@ -738,16 +922,32 @@
             }
         }
         
-        document.getElementById('clickBtn').onclick = handleClick;
-        document.getElementById('upgradeBtn').onclick = buyNormalUpgrade;
-        document.getElementById('superUpgradeBtn').onclick = buySuperUpgrade;
-        document.getElementById('autoClickerBtn').onclick = buyAutoClicker;
-        document.getElementById('saveBtn').onclick = saveGame;
-        document.getElementById('saveLeaderboardBtn').onclick = addLeaderboardRecord;
-        document.getElementById('clearLeaderboardBtn').onclick = clearLeaderboard;
+        // Обработчики
+        document.getElementById('clickBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            handleClick(e);
+            return false;
+        });
+        
+        document.getElementById('upgradeBtn').onclick = function(e) { e.preventDefault(); buyNormalUpgrade(); };
+        document.getElementById('superUpgradeBtn').onclick = function(e) { e.preventDefault(); buySuperUpgrade(); };
+        document.getElementById('autoClickerBtn').onclick = function(e) { e.preventDefault(); buyAutoClicker(); };
+        document.getElementById('saveBtn').onclick = function(e) { e.preventDefault(); saveGame(); };
+        document.getElementById('saveLeaderboardBtn').onclick = function(e) { e.preventDefault(); addLeaderboardRecord(); };
+        document.getElementById('clearLeaderboardBtn').onclick = function(e) { e.preventDefault(); clearLeaderboard(); };
         document.getElementById('autosaveCheckbox').onchange = (e) => {
             setAutosaveEnabled(e.target.checked);
             localStorage.setItem('autosaveEnabled', e.target.checked);
+        };
+        
+        // Переключатель звука
+        const soundCheckbox = document.getElementById('soundCheckbox');
+        soundCheckbox.checked = soundEnabled;
+        soundCheckbox.onchange = (e) => {
+            soundEnabled = e.target.checked;
+            localStorage.setItem('soundEnabled', soundEnabled);
+            if (soundEnabled) initAudio();
         };
         
         loadGame();
@@ -773,6 +973,25 @@
                 showMessage('Обнаружены некорректные данные. Значения восстановлены.', 'error');
             }
         }, 5000);
+        
+        // Принудительное центрирование
+        function centerContent() {
+            const container = document.querySelector('.container');
+            if (container) {
+                const windowHeight = window.innerHeight;
+                const containerHeight = container.offsetHeight;
+                if (containerHeight < windowHeight) {
+                    const marginTop = (windowHeight - containerHeight) / 2;
+                    container.style.marginTop = marginTop + 'px';
+                    container.style.marginBottom = marginTop + 'px';
+                } else {
+                    container.style.marginTop = '20px';
+                    container.style.marginBottom = '20px';
+                }
+            }
+        }
+        window.addEventListener('load', centerContent);
+        window.addEventListener('resize', centerContent);
     </script>
 </body>
 </html>
