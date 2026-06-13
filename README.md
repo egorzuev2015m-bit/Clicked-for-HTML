@@ -4,7 +4,7 @@
 
 ## 🎮 Играть
 
-[https://egorzuev2015m-bit.github.io/Clicked-for-HTML/](https://egorzuev2015m-bit.github.io/Clicked-for-HTML/)
+[Кликни на ссылку чтобы играть!](https://egorzuev2015m-bit.github.io/Clicked-for-HTML/)
 
 ## 🕹️ Механики игры
 
