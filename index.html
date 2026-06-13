@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кликер - Достижения</title>
+    <title>Кликер - Автосохранение рекорда</title>
     <style>
         * {
             user-select: none;
@@ -147,6 +147,62 @@
             color: #ffd966;
             margin-top: 5px;
         }
+        .leaderboard-area {
+            background: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        .leaderboard-area h3 {
+            margin: 0 0 10px 0;
+            text-align: center;
+            color: #ffd966;
+        }
+        .leaderboard-list {
+            text-align: left;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .leaderboard-rank {
+            font-weight: bold;
+            color: #ffd966;
+            width: 40px;
+        }
+        .leaderboard-name {
+            flex: 1;
+        }
+        .leaderboard-score {
+            color: #4caf50;
+        }
+        .leaderboard-input-area {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .name-input {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            width: 150px;
+        }
+        .clear-btn {
+            background: #f44336;
+            font-size: 14px;
+            padding: 8px 15px;
+        }
+        .auto-save-badge {
+            font-size: 12px;
+            color: #4caf50;
+            margin-top: 5px;
+        }
         .achievements {
             margin-top: 20px;
             background: rgba(0,0,0,0.5);
@@ -269,6 +325,19 @@
             </div>
         </div>
 
+        <!-- ЛИДЕРБОРД С АВТОСОХРАНЕНИЕМ РЕКОРДА -->
+        <div class="leaderboard-area">
+            <h3>🏆 ЛИДЕРБОРД 🏆</h3>
+            <div class="leaderboard-input-area">
+                <input type="text" id="leaderboardName" class="name-input" placeholder="Твоё имя" maxlength="20">
+                <button id="clearLeaderboardBtn" class="upgrade-btn clear-btn">ОЧИСТИТЬ ВСЕ</button>
+            </div>
+            <div class="auto-save-badge">⭐ Рекорд сохраняется автоматически при каждом клике! ⭐</div>
+            <div id="leaderboardList" class="leaderboard-list">
+                <div style="text-align: center; padding: 20px;">Нет рекордов</div>
+            </div>
+        </div>
+
         <div class="achievements">
             <h3>🏆 ДОСТИЖЕНИЯ 🏆</h3>
             <div class="achievement" id="achMillion">
@@ -289,7 +358,7 @@
         </div>
 
         <div class="message" id="message">
-            Нажми КЛИК чтобы начать. Получай достижения!
+            Нажми КЛИК чтобы начать. Введи имя и кликай — рекорд сам сохранится!
         </div>
     </div>
 
@@ -320,6 +389,116 @@
         let achMillionUnlocked = false;
         let achCollectorUnlocked = false;
         
+        // ========== ЛИДЕРБОРД С АВТОСОХРАНЕНИЕМ ==========
+        let localLeaderboard = [];
+        let currentPlayerName = localStorage.getItem('currentPlayerName') || "";
+        
+        // Загружаем имя, если было
+        if (currentPlayerName) {
+            document.getElementById('leaderboardName').value = currentPlayerName;
+        }
+        
+        function loadLeaderboard() {
+            const saved = localStorage.getItem('localLeaderboard');
+            if (saved) {
+                try {
+                    localLeaderboard = JSON.parse(saved);
+                } catch(e) { localLeaderboard = []; }
+            } else {
+                localLeaderboard = [];
+            }
+            displayLeaderboard();
+        }
+        
+        function displayLeaderboard() {
+            const container = document.getElementById('leaderboardList');
+            if (!localLeaderboard.length) {
+                container.innerHTML = '<div style="text-align: center; padding: 20px;">Нет рекордов</div>';
+                return;
+            }
+            const sorted = [...localLeaderboard].sort((a,b) => b.score - a.score);
+            let html = '';
+            for (let i = 0; i < Math.min(sorted.length, 15); i++) {
+                let isCurrent = (sorted[i].name === currentPlayerName);
+                html += `<div class="leaderboard-item" style="${isCurrent ? 'background: rgba(76, 175, 80, 0.2);' : ''}">
+                    <span class="leaderboard-rank">${i+1}</span>
+                    <span class="leaderboard-name">${escapeHtml(sorted[i].name)}</span>
+                    <span class="leaderboard-score">${formatNumber(sorted[i].score)}</span>
+                </div>`;
+            }
+            container.innerHTML = html;
+        }
+        
+        function saveLeaderboard() {
+            localStorage.setItem('localLeaderboard', JSON.stringify(localLeaderboard));
+            displayLeaderboard();
+        }
+        
+        // АВТОСОХРАНЕНИЕ РЕКОРДА - вызывается при каждом клике
+        function autoSaveRecord() {
+            let name = document.getElementById('leaderboardName').value.trim();
+            if (!name) return; // нет имени - не сохраняем
+            
+            // Обновляем сохранённое имя
+            if (name !== currentPlayerName) {
+                currentPlayerName = name;
+                localStorage.setItem('currentPlayerName', currentPlayerName);
+            }
+            
+            // Ищем рекорд этого игрока
+            let existingIndex = -1;
+            for (let i = 0; i < localLeaderboard.length; i++) {
+                if (localLeaderboard[i].name === name) {
+                    existingIndex = i;
+                    break;
+                }
+            }
+            
+            let currentScore = Math.floor(clicks);
+            
+            if (existingIndex !== -1) {
+                // Если текущий счёт больше сохранённого - обновляем
+                if (currentScore > localLeaderboard[existingIndex].score) {
+                    localLeaderboard[existingIndex].score = currentScore;
+                    localLeaderboard[existingIndex].date = Date.now();
+                    saveLeaderboard();
+                    // Показываем сообщение только при первом превышении в этой сессии (не спамим)
+                    if (!window._recordShownThisSession) {
+                        showMessage(`🏆 Новый рекорд! ${formatNumber(currentScore)} кликов!`, "success");
+                        window._recordShownThisSession = true;
+                        setTimeout(() => { window._recordShownThisSession = false; }, 5000);
+                    }
+                }
+            } else {
+                // Новый игрок - добавляем рекорд
+                localLeaderboard.push({ 
+                    name: name, 
+                    score: currentScore, 
+                    date: Date.now() 
+                });
+                saveLeaderboard();
+                showMessage(`🎉 Рекорд сохранён! ${formatNumber(currentScore)} кликов`, "success");
+            }
+        }
+        
+        function clearLeaderboard() {
+            if (confirm("Точно очистить все рекорды?")) {
+                localLeaderboard = [];
+                saveLeaderboard();
+                showMessage("Лидерборд очищен", "success");
+            }
+        }
+        
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        // =============================================
+        
         function getNormalUpgradeCost() {
             return 20 + (normalUpgrade * 10);
         }
@@ -335,7 +514,6 @@
             return SUPER_BASE_COST + (superUpgrade * SUPER_COST_INCREMENT);
         }
         
-        // Бонусы от достижений
         function getAchievementBonus() {
             let bonus = 0;
             if (achMillionUnlocked) bonus += 10;
@@ -355,18 +533,15 @@
             return basePower * multiplier;
         }
         
-        // Проверка достижений
         function checkAchievements() {
             let newUnlock = false;
             
-            // Миллионер: 100 000 кликов
             if (!achMillionUnlocked && clicks >= 100000) {
                 achMillionUnlocked = true;
                 newUnlock = true;
                 showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: Миллионер! +10 к силе клика", "success");
             }
             
-            // Коллекционер: все 50 X2 улучшений
             if (!achCollectorUnlocked && superUpgrade >= MAX_SUPER_UPGRADE) {
                 achCollectorUnlocked = true;
                 newUnlock = true;
@@ -441,7 +616,7 @@
             msgDiv.className = 'message ' + type;
             setTimeout(() => {
                 if (msgDiv.innerHTML === text) {
-                    msgDiv.innerHTML = 'Нажми КЛИК чтобы начать. Получай достижения!';
+                    msgDiv.innerHTML = 'Нажми КЛИК чтобы начать. Введи имя и кликай — рекорд сам сохранится!';
                     msgDiv.className = 'message';
                 }
             }, 3000);
@@ -462,6 +637,7 @@
                         clicks += getTotalClickPower();
                         updateUI();
                         checkAchievements();
+                        autoSaveRecord(); // автосохранение рекорда при автоклике
                     }
                 }, 1000);
             }
@@ -513,6 +689,8 @@
             clicks += gain;
             updateUI();
             checkAchievements();
+            autoSaveRecord(); // АВТОСОХРАНЕНИЕ РЕКОРДА ПРИ КЛИКЕ
+            
             let btn = document.getElementById('clickBtn');
             btn.style.transform = 'scale(0.95)';
             setTimeout(() => { btn.style.transform = ''; }, 100);
@@ -555,6 +733,7 @@
                                 clicks += getTotalClickPower();
                                 updateUI();
                                 checkAchievements();
+                                autoSaveRecord();
                             }
                         }, 1000);
                     }
@@ -592,25 +771,40 @@
             autosaveEnabled = enabled;
             if (enabled) {
                 startAutosave();
-                showMessage('Автосохранение включено', 'success');
+                showMessage('Автосохранение игры включено', 'success');
             } else {
                 if (autosaveInterval) clearInterval(autosaveInterval);
                 autosaveInterval = null;
-                showMessage('Автосохранение выключено', 'success');
+                showMessage('Автосохранение игры выключено', 'success');
             }
         }
         
+        // Обработчики
         document.getElementById('clickBtn').onclick = handleClick;
         document.getElementById('upgradeBtn').onclick = buyNormalUpgrade;
         document.getElementById('superUpgradeBtn').onclick = buySuperUpgrade;
         document.getElementById('autoClickerBtn').onclick = buyAutoClicker;
         document.getElementById('saveBtn').onclick = saveGame;
+        document.getElementById('clearLeaderboardBtn').onclick = clearLeaderboard;
         document.getElementById('autosaveCheckbox').onchange = (e) => {
             setAutosaveEnabled(e.target.checked);
             localStorage.setItem('autosaveEnabled', e.target.checked);
         };
         
+        // При изменении имени в поле ввода - обновляем currentPlayerName
+        document.getElementById('leaderboardName').oninput = (e) => {
+            let newName = e.target.value.trim();
+            if (newName) {
+                currentPlayerName = newName;
+                localStorage.setItem('currentPlayerName', currentPlayerName);
+                // Сразу проверяем и сохраняем рекорд для нового имени
+                autoSaveRecord();
+            }
+        };
+        
         loadGame();
+        loadLeaderboard();
+        
         let savedState = localStorage.getItem('autosaveEnabled');
         if (savedState === 'true') {
             document.getElementById('autosaveCheckbox').checked = true;
