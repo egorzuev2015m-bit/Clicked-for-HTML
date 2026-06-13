@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кликер</title>
+    <title>Кликер - Достижения</title>
     <style>
         * {
             user-select: none;
@@ -109,9 +109,6 @@
             color: white;
             font-weight: bold;
         }
-        .upgrade-btn:active {
-            transform: scale(0.97);
-        }
         .divider {
             height: 3px;
             background: linear-gradient(to right, transparent, white, transparent);
@@ -145,26 +142,57 @@
             font-weight: bold;
             margin-top: 8px;
         }
-        .shop-item button:active {
-            transform: scale(0.97);
-        }
         .shop-limit {
             font-size: 14px;
             color: #ffd966;
             margin-top: 5px;
         }
-        .inventory {
+        .achievements {
             margin-top: 20px;
-            font-size: 16px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.5);
             padding: 12px;
+            border-radius: 15px;
+            text-align: left;
+        }
+        .achievements h3 {
+            margin: 0 0 10px 0;
+            text-align: center;
+            color: #ffd966;
+        }
+        .achievement {
+            background: rgba(0,0,0,0.4);
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .achievement-name {
+            font-weight: bold;
+        }
+        .achievement-status {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        .locked {
+            background: #555;
+            color: #aaa;
+        }
+        .unlocked {
+            background: #4caf50;
+            color: white;
+        }
+        .inventory {
+            margin-top: 15px;
+            font-size: 14px;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
             border-radius: 12px;
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
-        }
-        .inventory div {
-            padding: 5px 15px;
         }
         .message {
             margin-top: 20px;
@@ -241,6 +269,19 @@
             </div>
         </div>
 
+        <div class="achievements">
+            <h3>🏆 ДОСТИЖЕНИЯ 🏆</h3>
+            <div class="achievement" id="achMillion">
+                <span class="achievement-name">💰 Миллионер (100 000 кликов)</span>
+                <span class="achievement-status locked" id="achMillionStatus">🔒</span>
+            </div>
+            <div class="achievement" id="achCollector">
+                <span class="achievement-name">📦 Коллекционер (все X2 улучшения)</span>
+                <span class="achievement-status locked" id="achCollectorStatus">🔒</span>
+            </div>
+            <div style="font-size: 12px; text-align: center; margin-top: 8px;">Награды даются автоматически</div>
+        </div>
+
         <div class="inventory">
             <div>Обычных улучшений: <span id="normalUpgradeCount">0</span></div>
             <div>X2 улучшений: <span id="superUpgradeCount">0</span></div>
@@ -248,7 +289,7 @@
         </div>
 
         <div class="message" id="message">
-            Нажми КЛИК чтобы начать. Обычное улучшение дорожает на 10 после каждой покупки (бесконечно).
+            Нажми КЛИК чтобы начать. Получай достижения!
         </div>
     </div>
 
@@ -275,6 +316,10 @@
         let autoClickerInterval = null;
         let autoClickerEndTime = 0;
         
+        // Достижения
+        let achMillionUnlocked = false;
+        let achCollectorUnlocked = false;
+        
         function getNormalUpgradeCost() {
             return 20 + (normalUpgrade * 10);
         }
@@ -290,11 +335,71 @@
             return SUPER_BASE_COST + (superUpgrade * SUPER_COST_INCREMENT);
         }
         
+        // Бонусы от достижений
+        function getAchievementBonus() {
+            let bonus = 0;
+            if (achMillionUnlocked) bonus += 10;
+            return bonus;
+        }
+        
+        function getMultiplierBonus() {
+            let mult = 1;
+            if (achCollectorUnlocked) mult *= 10;
+            return mult;
+        }
+        
         function getTotalClickPower() {
-            let basePower = 1 + normalUpgrade;
-            let multiplier = Math.pow(2, superUpgrade);
+            let basePower = 1 + normalUpgrade + getAchievementBonus();
+            let multiplier = Math.pow(2, superUpgrade) * getMultiplierBonus();
             if (multiplier > 1e15) multiplier = 1e15;
             return basePower * multiplier;
+        }
+        
+        // Проверка достижений
+        function checkAchievements() {
+            let newUnlock = false;
+            
+            // Миллионер: 100 000 кликов
+            if (!achMillionUnlocked && clicks >= 100000) {
+                achMillionUnlocked = true;
+                newUnlock = true;
+                showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: Миллионер! +10 к силе клика", "success");
+            }
+            
+            // Коллекционер: все 50 X2 улучшений
+            if (!achCollectorUnlocked && superUpgrade >= MAX_SUPER_UPGRADE) {
+                achCollectorUnlocked = true;
+                newUnlock = true;
+                showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: Коллекционер! x10 к множителю", "success");
+            }
+            
+            if (newUnlock) {
+                updateUI();
+                saveGame();
+            }
+            
+            updateAchievementsUI();
+        }
+        
+        function updateAchievementsUI() {
+            const millionStatus = document.getElementById('achMillionStatus');
+            const collectorStatus = document.getElementById('achCollectorStatus');
+            
+            if (achMillionUnlocked) {
+                millionStatus.textContent = '✅';
+                millionStatus.className = 'achievement-status unlocked';
+            } else {
+                millionStatus.textContent = `${formatNumber(100000 - clicks)}/${formatNumber(100000)}`;
+                millionStatus.className = 'achievement-status locked';
+            }
+            
+            if (achCollectorUnlocked) {
+                collectorStatus.textContent = '✅';
+                collectorStatus.className = 'achievement-status unlocked';
+            } else {
+                collectorStatus.textContent = `${superUpgrade}/${MAX_SUPER_UPGRADE}`;
+                collectorStatus.className = 'achievement-status locked';
+            }
         }
         
         function updateUI() {
@@ -309,9 +414,9 @@
             document.getElementById('normalUpgradeCount').textContent = normalUpgrade;
             document.getElementById('upgradeCost').textContent = formatNumber(getNormalUpgradeCost());
             document.getElementById('superUpgradeCount').textContent = superUpgrade;
-            document.getElementById('superMultiplier').textContent = Math.pow(2, superUpgrade);
+            document.getElementById('superMultiplier').textContent = Math.pow(2, superUpgrade) * getMultiplierBonus();
             document.getElementById('superUpgradeRemaining').textContent = MAX_SUPER_UPGRADE - superUpgrade;
-            document.getElementById('totalMultiplier').textContent = Math.pow(2, superUpgrade) * (1 + normalUpgrade);
+            document.getElementById('totalMultiplier').textContent = (1 + normalUpgrade + getAchievementBonus()) + " × " + (Math.pow(2, superUpgrade) * getMultiplierBonus());
             document.getElementById('superUpgradeCost').textContent = formatNumber(getSuperUpgradeCost());
             
             if (autoClickerEndTime > Date.now()) {
@@ -326,6 +431,8 @@
                 }
                 document.getElementById('autoClickerStatus').innerHTML = `Автокликер неактивен`;
             }
+            
+            updateAchievementsUI();
         }
         
         function showMessage(text, type) {
@@ -334,10 +441,10 @@
             msgDiv.className = 'message ' + type;
             setTimeout(() => {
                 if (msgDiv.innerHTML === text) {
-                    msgDiv.innerHTML = 'Нажми КЛИК чтобы начать. Обычное улучшение дорожает на 10 после каждой покупки (бесконечно).';
+                    msgDiv.innerHTML = 'Нажми КЛИК чтобы начать. Получай достижения!';
                     msgDiv.className = 'message';
                 }
-            }, 2500);
+            }, 3000);
         }
         
         function startAutoClicker(durationSec) {
@@ -354,6 +461,7 @@
                     } else {
                         clicks += getTotalClickPower();
                         updateUI();
+                        checkAchievements();
                     }
                 }, 1000);
             }
@@ -393,7 +501,8 @@
                 clicks -= currentCost;
                 superUpgrade++;
                 updateUI();
-                showMessage(`Куплено X2 улучшение! Множитель x${Math.pow(2, superUpgrade)}. Осталось ${MAX_SUPER_UPGRADE - superUpgrade} покупок.`, "success");
+                checkAchievements();
+                showMessage(`Куплено X2 улучшение! Множитель x${Math.pow(2, superUpgrade) * getMultiplierBonus()}. Осталось ${MAX_SUPER_UPGRADE - superUpgrade} покупок.`, "success");
             } else {
                 showMessage(`Не хватает кликов! Нужно ${formatNumber(currentCost)} кликов.`, "error");
             }
@@ -403,6 +512,7 @@
             let gain = getTotalClickPower();
             clicks += gain;
             updateUI();
+            checkAchievements();
             let btn = document.getElementById('clickBtn');
             btn.style.transform = 'scale(0.95)';
             setTimeout(() => { btn.style.transform = ''; }, 100);
@@ -413,7 +523,9 @@
                 clicks: Math.floor(clicks),
                 normalUpgrade: normalUpgrade,
                 superUpgrade: superUpgrade,
-                autoClickerEndTime: autoClickerEndTime
+                autoClickerEndTime: autoClickerEndTime,
+                achMillionUnlocked: achMillionUnlocked,
+                achCollectorUnlocked: achCollectorUnlocked
             };
             localStorage.setItem('clickerSave', JSON.stringify(saveData));
             showMessage('Игра сохранена!', 'success');
@@ -427,6 +539,8 @@
                     clicks = (typeof data.clicks === 'number' && data.clicks >= 0) ? Math.floor(data.clicks) : 0;
                     normalUpgrade = (typeof data.normalUpgrade === 'number' && data.normalUpgrade >= 0) ? Math.floor(data.normalUpgrade) : 0;
                     superUpgrade = (typeof data.superUpgrade === 'number' && data.superUpgrade >= 0) ? Math.floor(data.superUpgrade) : 0;
+                    achMillionUnlocked = data.achMillionUnlocked === true;
+                    achCollectorUnlocked = data.achCollectorUnlocked === true;
                     if (superUpgrade > MAX_SUPER_UPGRADE) superUpgrade = MAX_SUPER_UPGRADE;
                     
                     if (data.autoClickerEndTime && data.autoClickerEndTime > Date.now()) {
@@ -440,29 +554,36 @@
                             } else {
                                 clicks += getTotalClickPower();
                                 updateUI();
+                                checkAchievements();
                             }
                         }, 1000);
                     }
                     updateUI();
                 } catch(e) {
-                    clicks = 0;
-                    normalUpgrade = 0;
-                    superUpgrade = 0;
-                    updateUI();
+                    resetGame();
                 }
             }
+        }
+        
+        function resetGame() {
+            clicks = 0;
+            normalUpgrade = 0;
+            superUpgrade = 0;
+            achMillionUnlocked = false;
+            achCollectorUnlocked = false;
+            if (autoClickerInterval) {
+                clearInterval(autoClickerInterval);
+                autoClickerInterval = null;
+            }
+            autoClickerEndTime = 0;
+            updateUI();
         }
         
         function startAutosave() {
             if (autosaveInterval) clearInterval(autosaveInterval);
             if (autosaveEnabled) {
                 autosaveInterval = setInterval(() => {
-                    localStorage.setItem('clickerSave', JSON.stringify({
-                        clicks: Math.floor(clicks),
-                        normalUpgrade: normalUpgrade,
-                        superUpgrade: superUpgrade,
-                        autoClickerEndTime: autoClickerEndTime
-                    }));
+                    saveGame();
                 }, AUTOSAVE_INTERVAL_MS);
             }
         }
