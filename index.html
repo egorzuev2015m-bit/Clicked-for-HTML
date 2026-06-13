@@ -341,6 +341,11 @@
             flex-wrap: wrap;
         }
         
+        .inventory span {
+            font-weight: bold;
+            color: #ffd966;
+        }
+        
         .message {
             margin-top: 20px;
             padding: 10px;
@@ -450,7 +455,7 @@
                 <span class="achievement-status locked" id="achMillionStatus">🔒</span>
             </div>
             <div class="achievement" id="achAutoMaster">
-                <span class="achievement-name">🤖 Мастер автокликера (3 покупки)</span>
+                <span class="achievement-name">🤖 Мастер автокликера (3 покупки автокликера)</span>
                 <span class="achievement-status locked" id="achAutoMasterStatus">🔒</span>
             </div>
             <div class="achievement" id="achWorkaholic">
@@ -458,18 +463,18 @@
                 <span class="achievement-status locked" id="achWorkaholicStatus">🔒</span>
             </div>
             <div class="achievement" id="achCollector">
-                <span class="achievement-name">📦 Коллекционер (все X2 улучшения)</span>
+                <span class="achievement-name">📦 Коллекционер (все 50 X2 улучшений)</span>
                 <span class="achievement-status locked" id="achCollectorStatus">🔒</span>
             </div>
-            <div style="font-size: 12px; text-align: center; margin-top: 8px;">Награды даются автоматически</div>
+            <div style="font-size: 12px; text-align: center; margin-top: 8px;">✅ Награды даются автоматически</div>
         </div>
 
         <div class="inventory">
-            <div>Обычных улучшений: <span id="normalUpgradeCount">0</span></div>
-            <div>X2 улучшений: <span id="superUpgradeCount">0</span></div>
-            <div>Автокликеров куплено: <span id="autoPurchaseCount">0</span></div>
-            <div>Время в игре: <span id="playTimeDisplay">0</span> сек</div>
-            <div>Множитель: x<span id="totalMultiplier">1</span></div>
+            <div>📈 Обычных улучшений: <span id="normalUpgradeCount">0</span></div>
+            <div>⚡ X2 улучшений: <span id="superUpgradeCount">0</span></div>
+            <div>🤖 Автокликеров куплено: <span id="autoPurchaseCount">0</span></div>
+            <div>⏱️ Время в игре: <span id="playTimeDisplay">0</span> сек</div>
+            <div>🔥 Множитель: x<span id="totalMultiplier">1</span></div>
         </div>
 
         <div class="message" id="message">
@@ -689,7 +694,7 @@
             if (!achAutoMasterUnlocked && autoClickerPurchases >= 3) {
                 achAutoMasterUnlocked = true;
                 newUnlock = true;
-                showMessage("🏆 ДОСТИЖЕНИЕ: Мастер автокликера! (3 покупки)", "success");
+                showMessage("🏆 ДОСТИЖЕНИЕ: Мастер автокликера! (3 покупки автокликера)", "success");
             }
             if (!achWorkaholicUnlocked && totalPlayTime >= 86400) {
                 achWorkaholicUnlocked = true;
@@ -717,24 +722,27 @@
             const workaholic = document.getElementById('achWorkaholicStatus');
             const collector = document.getElementById('achCollectorStatus');
             
-            novice.textContent = achNoviceUnlocked ? '✅' : `${formatNumber(1000 - clicks)}/${formatNumber(1000)}`;
-            novice.className = achNoviceUnlocked ? 'achievement-status unlocked' : 'achievement-status locked';
+            if (achNoviceUnlocked) { novice.textContent = '✅'; novice.className = 'achievement-status unlocked'; }
+            else { novice.textContent = `${formatNumber(1000 - clicks)}/${formatNumber(1000)}`; novice.className = 'achievement-status locked'; }
             
-            pro.textContent = achProUnlocked ? '✅' : `${formatNumber(10000 - clicks)}/${formatNumber(10000)}`;
-            pro.className = achProUnlocked ? 'achievement-status unlocked' : 'achievement-status locked';
+            if (achProUnlocked) { pro.textContent = '✅'; pro.className = 'achievement-status unlocked'; }
+            else { pro.textContent = `${formatNumber(10000 - clicks)}/${formatNumber(10000)}`; pro.className = 'achievement-status locked'; }
             
-            million.textContent = achMillionUnlocked ? '✅' : `${formatNumber(100000 - clicks)}/${formatNumber(100000)}`;
-            million.className = achMillionUnlocked ? 'achievement-status unlocked' : 'achievement-status locked';
+            if (achMillionUnlocked) { million.textContent = '✅'; million.className = 'achievement-status unlocked'; }
+            else { million.textContent = `${formatNumber(100000 - clicks)}/${formatNumber(100000)}`; million.className = 'achievement-status locked'; }
             
-            autoMaster.textContent = achAutoMasterUnlocked ? '✅' : `${autoClickerPurchases}/3`;
-            autoMaster.className = achAutoMasterUnlocked ? 'achievement-status unlocked' : 'achievement-status locked';
+            if (achAutoMasterUnlocked) { autoMaster.textContent = '✅'; autoMaster.className = 'achievement-status unlocked'; }
+            else { autoMaster.textContent = `${autoClickerPurchases}/3`; autoMaster.className = 'achievement-status locked'; }
             
-            const remainingTime = Math.max(0, 86400 - totalPlayTime);
-            workaholic.textContent = achWorkaholicUnlocked ? '✅' : `${Math.floor(remainingTime)} сек`;
-            workaholic.className = achWorkaholicUnlocked ? 'achievement-status unlocked' : 'achievement-status locked';
+            if (achWorkaholicUnlocked) { workaholic.textContent = '✅'; workaholic.className = 'achievement-status unlocked'; }
+            else { 
+                const remaining = Math.max(0, 86400 - totalPlayTime);
+                workaholic.textContent = `${Math.floor(remaining)} сек`;
+                workaholic.className = 'achievement-status locked';
+            }
             
-            collector.textContent = achCollectorUnlocked ? '✅' : `${superUpgrade}/${MAX_SUPER_UPGRADE}`;
-            collector.className = achCollectorUnlocked ? 'achievement-status unlocked' : 'achievement-status locked';
+            if (achCollectorUnlocked) { collector.textContent = '✅'; collector.className = 'achievement-status unlocked'; }
+            else { collector.textContent = `${superUpgrade}/${MAX_SUPER_UPGRADE}`; collector.className = 'achievement-status locked'; }
         }
         
         function updateUI() {
@@ -914,4 +922,123 @@
                                 checkAchievements();
                                 const btn = document.getElementById('clickBtn');
                                 const rect = btn.getBoundingClientRect();
-                                showFloatingNumber(rect.left + rect.width
+                                showFloatingNumber(rect.left + rect.width/2, rect.top + rect.height/2, gain);
+                            }
+                        }, 1000);
+                    }
+                    updateUI();
+                } catch(e) {
+                    resetGame();
+                }
+            }
+        }
+        
+        function resetGame() {
+            clicks = 0;
+            normalUpgrade = 0;
+            superUpgrade = 0;
+            autoClickerPurchases = 0;
+            totalPlayTime = 0;
+            achNoviceUnlocked = false;
+            achProUnlocked = false;
+            achMillionUnlocked = false;
+            achAutoMasterUnlocked = false;
+            achWorkaholicUnlocked = false;
+            achCollectorUnlocked = false;
+            if (autoClickerInterval) { clearInterval(autoClickerInterval); autoClickerInterval = null; }
+            autoClickerEndTime = 0;
+            updateUI();
+        }
+        
+        function startAutosave() {
+            if (autosaveInterval) clearInterval(autosaveInterval);
+            if (autosaveEnabled) {
+                autosaveInterval = setInterval(() => { saveGame(); }, AUTOSAVE_INTERVAL_MS);
+            }
+        }
+        
+        function setAutosaveEnabled(enabled) {
+            autosaveEnabled = enabled;
+            if (enabled) {
+                startAutosave();
+                showMessage('Автосохранение игры включено', 'success');
+            } else {
+                if (autosaveInterval) clearInterval(autosaveInterval);
+                autosaveInterval = null;
+                showMessage('Автосохранение игры выключено', 'success');
+            }
+        }
+        
+        // Обработчики
+        document.getElementById('clickBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            handleClick(e);
+            return false;
+        });
+        
+        document.getElementById('upgradeBtn').onclick = function(e) { e.preventDefault(); buyNormalUpgrade(); };
+        document.getElementById('superUpgradeBtn').onclick = function(e) { e.preventDefault(); buySuperUpgrade(); };
+        document.getElementById('autoClickerBtn').onclick = function(e) { e.preventDefault(); buyAutoClicker(); };
+        document.getElementById('saveBtn').onclick = function(e) { e.preventDefault(); saveGame(); };
+        document.getElementById('saveLeaderboardBtn').onclick = function(e) { e.preventDefault(); addLeaderboardRecord(); };
+        document.getElementById('clearLeaderboardBtn').onclick = function(e) { e.preventDefault(); clearLeaderboard(); };
+        document.getElementById('autosaveCheckbox').onchange = (e) => {
+            setAutosaveEnabled(e.target.checked);
+            localStorage.setItem('autosaveEnabled', e.target.checked);
+        };
+        
+        // Переключатель звука
+        const soundCheckbox = document.getElementById('soundCheckbox');
+        soundCheckbox.checked = soundEnabled;
+        soundCheckbox.onchange = (e) => {
+            soundEnabled = e.target.checked;
+            localStorage.setItem('soundEnabled', soundEnabled);
+            if (soundEnabled) initAudio();
+        };
+        
+        loadGame();
+        loadLeaderboard();
+        
+        let savedState = localStorage.getItem('autosaveEnabled');
+        if (savedState === 'true') {
+            document.getElementById('autosaveCheckbox').checked = true;
+            setAutosaveEnabled(true);
+        } else {
+            document.getElementById('autosaveCheckbox').checked = false;
+            setAutosaveEnabled(false);
+        }
+        
+        setInterval(() => {
+            let corrupted = false;
+            if (isNaN(clicks) || clicks < 0) { clicks = 0; corrupted = true; }
+            if (isNaN(normalUpgrade) || normalUpgrade < 0) { normalUpgrade = 0; corrupted = true; }
+            if (isNaN(superUpgrade) || superUpgrade < 0) { superUpgrade = 0; corrupted = true; }
+            if (superUpgrade > MAX_SUPER_UPGRADE) { superUpgrade = MAX_SUPER_UPGRADE; corrupted = true; }
+            if (corrupted) {
+                updateUI();
+                showMessage('Обнаружены некорректные данные. Значения восстановлены.', 'error');
+            }
+        }, 5000);
+        
+        // Принудительное центрирование
+        function centerContent() {
+            const container = document.querySelector('.container');
+            if (container) {
+                const windowHeight = window.innerHeight;
+                const containerHeight = container.offsetHeight;
+                if (containerHeight < windowHeight) {
+                    const marginTop = (windowHeight - containerHeight) / 2;
+                    container.style.marginTop = marginTop + 'px';
+                    container.style.marginBottom = marginTop + 'px';
+                } else {
+                    container.style.marginTop = '20px';
+                    container.style.marginBottom = '20px';
+                }
+            }
+        }
+        window.addEventListener('load', centerContent);
+        window.addEventListener('resize', centerContent);
+    </script>
+</body>
+</html>
