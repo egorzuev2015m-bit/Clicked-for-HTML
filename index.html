@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Кликер - Полная версия</title>
+    <title>Кликер - Вкладки</title>
     <style>
         * {
             user-select: none;
@@ -27,40 +27,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        .star {
-            position: fixed;
-            background: white;
-            border-radius: 50%;
-            opacity: 0;
-            animation: twinkle 3s infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        @keyframes twinkle {
-            0% { opacity: 0; transform: scale(0.5); }
-            50% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0.5); }
         }
         
         .container {
-            position: relative;
-            z-index: 1;
             max-width: 850px;
             width: 100%;
             margin: 0 auto;
             background: rgba(0, 0, 0, 0.6);
-            padding: 25px;
+            padding: 20px;
             border-radius: 35px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
         
+        /* Зона кликов */
         .clicks-area {
             background: rgba(0, 0, 0, 0.4);
             padding: 20px;
@@ -152,6 +133,7 @@
             100% { transform: scale(1); }
         }
         
+        /* Секции для вкладок */
         .section {
             background: rgba(0, 0, 0, 0.4);
             padding: 15px;
@@ -307,144 +289,205 @@
         .pet-avatar:active {
             transform: scale(1.1);
         }
+        
+        /* НАВИГАЦИЯ ВНИЗУ */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            color: white;
+            font-size: 14px;
+            padding: 8px 20px;
+            margin: 0;
+            border-radius: 30px;
+        }
+        
+        .nav-btn.active {
+            background: #ff9800;
+            color: white;
+        }
+        
+        /* Контент вкладок */
+        .tab-content {
+            display: none;
+            margin-bottom: 60px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Отступ снизу для навигации */
+        .content-wrapper {
+            margin-bottom: 60px;
+        }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="clicks-area">
-        <div class="clicks">
-            <span id="clickCount">0</span> кликов
-        </div>
-        <div class="click-power">
-            💪 Сила клика: +<span id="clickPower">1</span>
-        </div>
-        <div class="click-power">
-            ✨ Бонус престижа: x<span id="prestigeBonus">1</span>
-        </div>
-        <div class="click-power">
-            🍀 Шанс крита: <span id="critChance">0</span>%
-        </div>
-        <div class="click-power">
-            ⚡ Бонус пета: +<span id="petBonus">0</span>%
-        </div>
-        <div class="click-power">
-            📊 КПС: <span id="cps">0</span> кликов/сек
+    <div class="content-wrapper">
+        <!-- ГЛАВНАЯ ВКЛАДКА -->
+        <div id="tabMain" class="tab-content active">
+            <div class="clicks-area">
+                <div class="clicks">
+                    <span id="clickCount">0</span> кликов
+                </div>
+                <div class="click-power">
+                    💪 Сила клика: +<span id="clickPower">1</span>
+                </div>
+                <div class="click-power">
+                    ✨ Бонус престижа: x<span id="prestigeBonus">1</span>
+                </div>
+                <div class="click-power">
+                    🍀 Шанс крита: <span id="critChance">0</span>%
+                </div>
+                <div class="click-power">
+                    ⚡ Бонус пета: +<span id="petBonus">0</span>%
+                </div>
+                
+                <button class="click-btn" id="clickBtn">КЛИК</button>
+                
+                <div class="save-area">
+                    <button id="saveBtn">💾 СОХРАНИТЬ</button>
+                    <button id="prestigeBtn" class="prestige-btn">🌟 ПРЕСТИЖ</button>
+                </div>
+            </div>
+            
+            <div class="inventory">
+                <div class="inventory-row">📈 Обычных: <span id="normalCount">0</span></div>
+                <div class="inventory-row">⚡ X2: <span id="superCount">0</span></div>
+                <div class="inventory-row">🌟 Престиж: <span id="prestigeLevel">0</span>/10</div>
+                <div class="inventory-row">⏱️ Время: <span id="playTime">0</span> сек</div>
+            </div>
+            
+            <div class="message" id="message">
+                👋 Нажми КЛИК чтобы начать!
+            </div>
         </div>
         
-        <button class="click-btn" id="clickBtn">КЛИК</button>
+        <!-- МАГАЗИН ВКЛАДКА -->
+        <div id="tabShop" class="tab-content">
+            <div class="section">
+                <h4>📈 УЛУЧШЕНИЯ</h4>
+                <div class="shop-item">
+                    <span>💪 Обычное улучшение (+1 сила)</span>
+                    <span>💰 <span id="upgradeCost">20</span></span>
+                    <button id="upgradeBtn">КУПИТЬ</button>
+                </div>
+                <div class="shop-item">
+                    <span>⚡ X2 улучшение (макс 50)</span>
+                    <span>💰 <span id="superUpgradeCost">10K</span></span>
+                    <button id="superUpgradeBtn">КУПИТЬ</button>
+                </div>
+                <div class="shop-item">
+                    <span>🤖 Автокликер (20 минут)</span>
+                    <span>💰 10B</span>
+                    <button id="autoClickerBtn">КУПИТЬ</button>
+                </div>
+                <div>
+                    <span class="autoclicker-status" id="autoClickerStatus">🤖 Неактивен</span>
+                </div>
+                <div>Куплено X2: <span id="superUpgradeCount">0</span> / 50 | Автокликеров: <span id="autoPurchaseCount">0</span></div>
+            </div>
+            
+            <div class="section">
+                <h4>⚡ ВРЕМЕННЫЕ УСКОРИТЕЛИ</h4>
+                <div id="activeBoosts" style="margin-bottom: 10px;"></div>
+                <div class="shop-item">
+                    <span>🚀 x2 на 30 секунд</span>
+                    <span>💰 50K</span>
+                    <button id="boostX2Btn">КУПИТЬ</button>
+                </div>
+                <div class="shop-item">
+                    <span>💥 x5 на 10 секунд</span>
+                    <span>💰 500K</span>
+                    <button id="boostX5Btn">КУПИТЬ</button>
+                </div>
+                <div class="shop-item">
+                    <span>🔥 x10 на 5 секунд</span>
+                    <span>💰 5M</span>
+                    <button id="boostX10Btn">КУПИТЬ</button>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h4>🌳 ДРЕВО НАВЫКОВ</h4>
+                <div class="skill-tree">
+                    <div class="skill-branch">
+                        <strong>💪 СИЛА</strong>
+                        <button class="skill-btn" id="skillPower1">+1 сила (1M)</button>
+                        <button class="skill-btn" id="skillPower2">+2 сила (10M)</button>
+                        <button class="skill-btn" id="skillPower3">+3 сила (100M)</button>
+                        <span class="skill-level" id="skillPowerLvl">0/3</span>
+                    </div>
+                    <div class="skill-branch">
+                        <strong>⚡ ЭФФЕКТИВНОСТЬ</strong>
+                        <button class="skill-btn" id="skillEff1">x2 оффлайн (5M)</button>
+                        <button class="skill-btn" id="skillEff2">x4 оффлайн (50M)</button>
+                        <button class="skill-btn" id="skillEff3">x8 оффлайн (500M)</button>
+                        <span class="skill-level" id="skillEffLvl">0/3</span>
+                    </div>
+                    <div class="skill-branch">
+                        <strong>🍀 УДАЧА</strong>
+                        <button class="skill-btn" id="skillLuck1">+5% крит (2M)</button>
+                        <button class="skill-btn" id="skillLuck2">+10% крит (20M)</button>
+                        <button class="skill-btn" id="skillLuck3">+20% крит (200M)</button>
+                        <span class="skill-level" id="skillLuckLvl">0/3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        <div class="save-area">
-            <button id="saveBtn">💾 СОХРАНИТЬ</button>
-            <button id="dailyBonusBtn" style="background: #4caf50;">🎁 ЕЖЕДНЕВНЫЙ БОНУС</button>
-            <button id="prestigeBtn" class="prestige-btn">🌟 ПРЕСТИЖ</button>
+        <!-- ПИТОМЕЦ ВКЛАДКА -->
+        <div id="tabPet" class="tab-content">
+            <div class="section">
+                <h4>🐾 ТВОЙ ПИТОМЕЦ 🐾</h4>
+                <div class="pet-avatar" id="petAvatar">🐣</div>
+                <div>Уровень пета: <span id="petLevel">0</span> / 20</div>
+                <div>До следующего уровня: <span id="petNextProgress">0</span> кликов</div>
+                <div>Бонус от пета: +<span id="petBonusDisplay">0</span>% к силе клика</div>
+                <progress id="petProgress" value="0" max="100" style="width: 100%; height: 10px; border-radius: 10px;"></progress>
+            </div>
+            
+            <div class="inventory">
+                <div class="inventory-row"><span>🆕 НОВИЧОК</span><span class="progress-text" id="achNoviceProgress">0/1000</span><span id="achNoviceStatus">❌</span></div>
+                <div class="inventory-row"><span>⭐ ПРОФИ</span><span class="progress-text" id="achProProgress">0/10000</span><span id="achProStatus">❌</span></div>
+                <div class="inventory-row"><span>💰 МИЛЛИОНЕР</span><span class="progress-text" id="achMillionProgress">0/100K</span><span id="achMillionStatus">❌</span></div>
+                <div class="inventory-row"><span>🤖 МАСТЕР АВТО</span><span class="progress-text" id="achAutoMasterProgress">0/3</span><span id="achAutoMasterStatus">❌</span></div>
+                <div class="inventory-row"><span>💪 ТРУДОГОЛИК</span><span class="progress-text" id="achWorkaholicProgress">0ч/24ч</span><span id="achWorkaholicStatus">❌</span></div>
+                <div class="inventory-row"><span>📦 КОЛЛЕКЦИОНЕР</span><span class="progress-text" id="achCollectorProgress">0/50</span><span id="achCollectorStatus">❌</span></div>
+                <div class="inventory-row"><span>🐉 ВЛАСТЕЛИН ПЕТОВ</span><span class="progress-text" id="achPetMasterProgress">0/20</span><span id="achPetMasterStatus">❌</span></div>
+            </div>
         </div>
     </div>
-
-    <div class="section">
-        <h4>🐾 ТВОЙ ПИТОМЕЦ 🐾</h4>
-        <div class="pet-avatar" id="petAvatar">🐣</div>
-        <div>Уровень пета: <span id="petLevel">0</span> / 20</div>
-        <div>До следующего уровня: <span id="petNextProgress">0</span> кликов</div>
-        <div>Бонус от пета: +<span id="petBonusDisplay">0</span>% к силе клика</div>
-        <progress id="petProgress" value="0" max="100" style="width: 100%; height: 10px; border-radius: 10px;"></progress>
-    </div>
-
-    <div class="section">
-        <h4>⚡ ВРЕМЕННЫЕ УСКОРИТЕЛИ ⚡</h4>
-        <div id="activeBoosts" style="margin-bottom: 10px;"></div>
-        <div class="shop-item">
-            <span>🚀 x2 на 30 секунд</span>
-            <span>💰 50K</span>
-            <button id="boostX2Btn">КУПИТЬ</button>
-        </div>
-        <div class="shop-item">
-            <span>💥 x5 на 10 секунд</span>
-            <span>💰 500K</span>
-            <button id="boostX5Btn">КУПИТЬ</button>
-        </div>
-        <div class="shop-item">
-            <span>🔥 x10 на 5 секунд</span>
-            <span>💰 5M</span>
-            <button id="boostX10Btn">КУПИТЬ</button>
-        </div>
-    </div>
-
-    <div class="skill-tree">
-        <div class="skill-branch">
-            <strong>💪 СИЛА</strong>
-            <button class="skill-btn" id="skillPower1">+1 сила (1M)</button>
-            <button class="skill-btn" id="skillPower2">+2 сила (10M)</button>
-            <button class="skill-btn" id="skillPower3">+3 сила (100M)</button>
-            <span class="skill-level" id="skillPowerLvl">0/3</span>
-        </div>
-        <div class="skill-branch">
-            <strong>⚡ ЭФФЕКТИВНОСТЬ</strong>
-            <button class="skill-btn" id="skillEff1">x2 оффлайн (5M)</button>
-            <button class="skill-btn" id="skillEff2">x4 оффлайн (50M)</button>
-            <button class="skill-btn" id="skillEff3">x8 оффлайн (500M)</button>
-            <span class="skill-level" id="skillEffLvl">0/3</span>
-        </div>
-        <div class="skill-branch">
-            <strong>🍀 УДАЧА</strong>
-            <button class="skill-btn" id="skillLuck1">+5% крит (2M)</button>
-            <button class="skill-btn" id="skillLuck2">+10% крит (20M)</button>
-            <button class="skill-btn" id="skillLuck3">+20% крит (200M)</button>
-            <span class="skill-level" id="skillLuckLvl">0/3</span>
-        </div>
-    </div>
-
-    <div class="section">
-        <h4>📈 УЛУЧШЕНИЯ</h4>
-        <div class="shop-item">
-            <span>💪 Обычное улучшение (+1 сила)</span>
-            <span>💰 <span id="upgradeCost">20</span></span>
-            <button id="upgradeBtn">КУПИТЬ</button>
-        </div>
-        <div class="shop-item">
-            <span>⚡ X2 улучшение (макс 50)</span>
-            <span>💰 <span id="superUpgradeCost">10K</span></span>
-            <button id="superUpgradeBtn">КУПИТЬ</button>
-        </div>
-        <div class="shop-item">
-            <span>🤖 Автокликер (20 минут)</span>
-            <span>💰 10B</span>
-            <button id="autoClickerBtn">КУПИТЬ</button>
-        </div>
-        <div>
-            <span class="autoclicker-status" id="autoClickerStatus">🤖 Неактивен</span>
-        </div>
-        <div>Куплено X2: <span id="superUpgradeCount">0</span> / 50 | Автокликеров: <span id="autoPurchaseCount">0</span></div>
-    </div>
-
-    <div class="inventory">
-        <div class="inventory-row"><span>🆕 НОВИЧОК</span><span class="progress-text" id="achNoviceProgress">0/1000</span><span id="achNoviceStatus">❌</span></div>
-        <div class="inventory-row"><span>⭐ ПРОФИ</span><span class="progress-text" id="achProProgress">0/10000</span><span id="achProStatus">❌</span></div>
-        <div class="inventory-row"><span>💰 МИЛЛИОНЕР</span><span class="progress-text" id="achMillionProgress">0/100K</span><span id="achMillionStatus">❌</span></div>
-        <div class="inventory-row"><span>🤖 МАСТЕР АВТО</span><span class="progress-text" id="achAutoMasterProgress">0/3</span><span id="achAutoMasterStatus">❌</span></div>
-        <div class="inventory-row"><span>💪 ТРУДОГОЛИК</span><span class="progress-text" id="achWorkaholicProgress">0ч/24ч</span><span id="achWorkaholicStatus">❌</span></div>
-        <div class="inventory-row"><span>📦 КОЛЛЕКЦИОНЕР</span><span class="progress-text" id="achCollectorProgress">0/50</span><span id="achCollectorStatus">❌</span></div>
-        <div class="inventory-row"><span>🐉 ВЛАСТЕЛИН ПЕТОВ</span><span class="progress-text" id="achPetMasterProgress">0/20</span><span id="achPetMasterStatus">❌</span></div>
-    </div>
-
-    <div class="inventory">
-        <div class="inventory-row">📈 Обычных: <span id="normalCount">0</span></div>
-        <div class="inventory-row">⚡ X2: <span id="superCount">0</span></div>
-        <div class="inventory-row">🌟 Престиж: <span id="prestigeLevel">0</span>/10</div>
-        <div class="inventory-row">⏱️ Время: <span id="playTime">0</span> сек</div>
-        <div class="inventory-row">🎁 След. бонус: <span id="dailyTimer">доступен</span></div>
-    </div>
-
-    <div class="message" id="message">
-        👋 Нажми КЛИК чтобы начать!
-    </div>
+    
     <div class="footer-link">
         🔗 <a href="https://egorzuev2015m-bit.github.io/Clicked-for-HTML/" target="_blank">Ссылка на проект GitHub</a>
     </div>
 </div>
 
+<!-- НАВИГАЦИЯ ВНИЗУ -->
+<div class="bottom-nav">
+    <button class="nav-btn active" data-tab="main">🏠 ГЛАВНАЯ</button>
+    <button class="nav-btn" data-tab="shop">🛒 МАГАЗИН</button>
+    <button class="nav-btn" data-tab="pet">🐾 ПЕТ</button>
+</div>
+
 <script>
     // ========================================================================
-    // ФУНКЦИЯ ФОРМАТИРОВАНИЯ БОЛЬШИХ ЧИСЕЛ
+    // ФОРМАТ ЧИСЕЛ
     // ========================================================================
     function formatNumber(num) {
         if (num < 1000) return Math.floor(num).toString();
@@ -461,26 +504,7 @@
     }
 
     // ========================================================================
-    // СОЗДАНИЕ ЗВЁЗД НА ФОНЕ
-    // ========================================================================
-    function createStars() {
-        for (let i = 0; i < 100; i++) {
-            let star = document.createElement('div');
-            star.classList.add('star');
-            let size = Math.random() * 3 + 1;
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 5 + 's';
-            star.style.animationDuration = Math.random() * 3 + 2 + 's';
-            document.body.appendChild(star);
-        }
-    }
-    createStars();
-
-    // ========================================================================
-    // ПЕРЕМЕННЫЕ ИГРЫ
+    // ПЕРЕМЕННЫЕ
     // ========================================================================
     let clicks = 0;
     let normalUpgrade = 0;
@@ -514,8 +538,6 @@
     let petClicks = 0;
     const PET_LEVELS = [0, 100, 500, 2000, 5000, 10000, 20000, 35000, 55000, 80000, 110000, 150000, 200000, 260000, 330000, 410000, 500000, 600000, 710000, 830000, 1000000];
     let activeBoost = { multiplier: 1, endTime: 0 };
-    let cpsHistory = [];
-    let lastCpsUpdate = Date.now();
     const PRESTIGE_REQUIREMENTS = [0, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000, 10000000000000, 100000000000000, 1000000000000000];
 
     // ========================================================================
@@ -575,29 +597,7 @@
     }
 
     // ========================================================================
-    // КПС (КЛИКИ В СЕКУНДУ)
-    // ========================================================================
-    function updateCPS() {
-        const now = Date.now();
-        const deltaSec = (now - lastCpsUpdate) / 1000;
-        if (deltaSec >= 0.5 && cpsHistory.length > 0) {
-            let totalClicks = 0;
-            for (let i = 0; i < cpsHistory.length; i++) {
-                totalClicks += cpsHistory[i];
-            }
-            let cps = totalClicks / (cpsHistory.length * 0.5);
-            document.getElementById('cps').textContent = Math.floor(cps);
-            cpsHistory = [];
-            lastCpsUpdate = now;
-        }
-    }
-    
-    function addClickToCPS() {
-        cpsHistory.push(1);
-    }
-
-    // ========================================================================
-    // АНИМАЦИЯ ВСПЛЫВАЮЩИХ ЧИСЕЛ
+    // АНИМАЦИЯ
     // ========================================================================
     function showFloatingNumber(x, y, value, isCrit) {
         const div = document.createElement('div');
@@ -717,29 +717,6 @@
     }
 
     // ========================================================================
-    // ЕЖЕДНЕВНЫЙ БОНУС
-    // ========================================================================
-    function claimDailyBonus() {
-        let lastBonusTime = localStorage.getItem('dailyBonusTime');
-        if (lastBonusTime === null) lastBonusTime = 0;
-        else lastBonusTime = parseInt(lastBonusTime);
-        
-        let now = Date.now();
-        let hoursSinceLast = (now - lastBonusTime) / (1000 * 60 * 60);
-        
-        if (hoursSinceLast >= 24) {
-            clicks = clicks + 100000;
-            localStorage.setItem('dailyBonusTime', now.toString());
-            showMessage("🎁 ЕЖЕДНЕВНЫЙ БОНУС: +100 000 кликов!", "success");
-            updateUI();
-            saveGame();
-        } else {
-            let hoursLeft = Math.ceil(24 - hoursSinceLast);
-            showMessage("⚠️ Бонус через " + hoursLeft + " часов.", "warning");
-        }
-    }
-
-    // ========================================================================
     // ПРЕСТИЖ
     // ========================================================================
     function doPrestige() {
@@ -778,7 +755,7 @@
     }
 
     // ========================================================================
-    // ПОКУПКА НАВЫКОВ
+    // ПОКУПКИ
     // ========================================================================
     function buySkill(level, cost, setter, name) {
         if (clicks >= cost) {
@@ -791,10 +768,7 @@
             showMessage("❌ Нужно " + formatNumber(cost) + " кликов!", "error");
         }
     }
-
-    // ========================================================================
-    // ПОКУПКА УЛУЧШЕНИЙ
-    // ========================================================================
+    
     function buyNormalUpgrade() {
         const cost = getNormalUpgradeCost();
         if (clicks >= cost) {
@@ -868,8 +842,6 @@
         
         if (!checkAntiCheat()) return false;
         addClickTimestamp();
-        addClickToCPS();
-        updateCPS();
         
         let gain = getTotalClickPower();
         let isCrit = Math.random() < getCritChance();
@@ -878,7 +850,7 @@
         clicks = clicks + gain;
         updatePet(gain);
         
-        const btn = document.getElementById('clickBtn').onclick = function() {alert(кнопка работает');
+        const btn = document.getElementById('clickBtn');
         const rect = btn.getBoundingClientRect();
         showFloatingNumber(rect.left + (rect.width / 2), rect.top + (rect.height / 2), gain, isCrit);
         
@@ -960,16 +932,6 @@
         
         let currentTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
         document.getElementById('playTime').innerHTML = Math.floor(currentTime);
-        
-        let lastBonus = localStorage.getItem('dailyBonusTime');
-        if (lastBonus === null) lastBonus = 0;
-        lastBonus = parseInt(lastBonus);
-        if (Date.now() >= lastBonus + (24 * 60 * 60 * 1000)) {
-            document.getElementById('dailyTimer').innerHTML = "доступен";
-        } else {
-            let hoursLeft = Math.ceil((lastBonus + (24 * 60 * 60 * 1000) - Date.now()) / (1000 * 60 * 60));
-            document.getElementById('dailyTimer').innerHTML = "через " + hoursLeft + "ч";
-        }
         
         if (Date.now() < activeBoost.endTime) {
             let sec = Math.ceil((activeBoost.endTime - Date.now()) / 1000);
@@ -1110,6 +1072,21 @@
     }
 
     // ========================================================================
+    // НАВИГАЦИЯ МЕЖДУ ВКЛАДКАМИ
+    // ========================================================================
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.getElementById('tab' + tabId.charAt(0).toUpperCase() + tabId.slice(1)).classList.add('active');
+        
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`.nav-btn[data-tab="${tabId}"]`).classList.add('active');
+    }
+    
+    // ========================================================================
     // ИНИЦИАЛИЗАЦИЯ
     // ========================================================================
     function init() {
@@ -1118,7 +1095,6 @@
         document.getElementById('clickBtn').addEventListener('click', handleClick);
         document.getElementById('saveBtn').addEventListener('click', function() { saveGame(); showMessage("💾 Сохранено!", "success"); });
         document.getElementById('prestigeBtn').addEventListener('click', doPrestige);
-        document.getElementById('dailyBonusBtn').addEventListener('click', claimDailyBonus);
         document.getElementById('upgradeBtn').addEventListener('click', buyNormalUpgrade);
         document.getElementById('superUpgradeBtn').addEventListener('click', buySuperUpgrade);
         document.getElementById('autoClickerBtn').addEventListener('click', buyAutoClicker);
@@ -1135,6 +1111,12 @@
         document.getElementById('skillLuck1').addEventListener('click', function() { if (skillLuck < 1) buySkill(1, 2000000, function() { skillLuck = 1; }, "+5% крит"); });
         document.getElementById('skillLuck2').addEventListener('click', function() { if (skillLuck < 2) buySkill(2, 20000000, function() { skillLuck = 2; }, "+10% крит"); });
         document.getElementById('skillLuck3').addEventListener('click', function() { if (skillLuck < 3) buySkill(3, 200000000, function() { skillLuck = 3; }, "+20% крит"); });
+        
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                switchTab(this.getAttribute('data-tab'));
+            });
+        });
         
         setInterval(function() { checkAchievements(); }, 1000);
         setInterval(function() { updateUI(); }, 1000);
