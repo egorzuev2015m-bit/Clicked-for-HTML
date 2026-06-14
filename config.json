@@ -1,0 +1,22 @@
+{
+  "game": {
+    "name": "Кликер",
+    "version": "3.0"
+  },
+  "upgrades": {
+    "normalBaseCost": 20,
+    "normalCostIncrement": 10,
+    "superBaseCost": 10000,
+    "superCostIncrement": 10000000,
+    "superMax": 50
+  },
+  "autoClicker": {
+    "cost": 10000000000,
+    "durationSeconds": 1200
+  },
+  "achievements": {
+    "novice": 1000,
+    "pro": 10000,
+    "million": 100000
+  }
+}
