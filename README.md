@@ -93,6 +93,12 @@
 - 1 000 000 000 → 1B
 - 1 000 000 000 000 → 1T
 - И далее: Qa, Qi, Sx, Sp, Oc, No, Dc
+- 
+  Скрин 
+
+- <p align="center">
+  <img src="screenshot.png" alt="Скриншот игры" width="300">
+</p>
 
 
 ## 🚀 Как запустить локально
