@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Кликер - Достижения</title>
+    <title>Кликер - Античитер</title>
     <style>
         * {
             user-select: none;
@@ -82,6 +82,12 @@
         
         .click-btn:active {
             transform: scale(0.96);
+        }
+        
+        .click-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
         }
         
         .floating-number {
@@ -375,6 +381,10 @@
             color: #ff6b6b;
         }
         
+        .warning {
+            color: #ff9800;
+        }
+        
         .success {
             color: #4caf50;
         }
@@ -504,6 +514,48 @@
     </div>
 
     <script>
+        // ========== ЗАЩИТА ОТ АВТОКЛИКЕРА ==========
+        let clickTimestamps = [];      // массив времен последних кликов
+        let isBlocked = false;         // блокировка кнопки
+        let blockEndTime = 0;          // время окончания блокировки
+        const MAX_CLICKS_PER_SECOND = 20;   // максимум кликов в секунду
+        const BLOCK_DURATION = 2000;         // длительность блокировки в мс
+        
+        function checkAntiCheat() {
+            const now = Date.now();
+            
+            // Убираем клики старше 1 секунды
+            clickTimestamps = clickTimestamps.filter(t => now - t < 1000);
+            
+            // Проверяем, не заблокирована ли кнопка
+            if (isBlocked && now < blockEndTime) {
+                showMessage("⚠️ Античитер: слишком быстрый клик! Подожди немного.", "warning");
+                return false;
+            }
+            
+            // Снимаем блокировку если время вышло
+            if (isBlocked && now >= blockEndTime) {
+                isBlocked = false;
+                document.getElementById('clickBtn').classList.remove('disabled');
+            }
+            
+            // Проверяем лимит кликов в секунду
+            if (clickTimestamps.length >= MAX_CLICKS_PER_SECOND) {
+                isBlocked = true;
+                blockEndTime = now + BLOCK_DURATION;
+                document.getElementById('clickBtn').classList.add('disabled');
+                showMessage(`🚨 ОБНАРУЖЕН АВТОКЛИКЕР! Кнопка заблокирована на ${BLOCK_DURATION/1000} секунд.`, "error");
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function addClickTimestamp() {
+            clickTimestamps.push(Date.now());
+        }
+        // ============================================
+        
         // ========== ЗВУК ==========
         let audioCtx = null;
         let soundEnabled = localStorage.getItem('soundEnabled') !== 'false';
@@ -878,6 +930,13 @@
                 event.preventDefault();
                 event.stopPropagation();
             }
+            
+            // ПРОВЕРКА АНТИЧИТА
+            if (!checkAntiCheat()) {
+                return false;
+            }
+            addClickTimestamp();
+            
             let gain = getTotalClickPower();
             clicks += gain;
             updateUI();
