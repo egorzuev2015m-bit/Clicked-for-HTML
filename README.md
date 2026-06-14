@@ -5,7 +5,7 @@
 ## 📸 Скриншот
 
 <p align="center">
-  <img src="screenshot.png" width="300" alt="Скриншот игры">
+  <img src="NaGitHub.png" width="300" alt="Скриншот игры">
 </p>
 
 ## 🎮 Играть
