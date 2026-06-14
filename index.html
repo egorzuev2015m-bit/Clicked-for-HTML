@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Кликер - Античитер</title>
+    <title>Кликер - Достижения</title>
     <style>
         * {
             user-select: none;
@@ -515,31 +515,26 @@
 
     <script>
         // ========== ЗАЩИТА ОТ АВТОКЛИКЕРА ==========
-        let clickTimestamps = [];      // массив времен последних кликов
-        let isBlocked = false;         // блокировка кнопки
-        let blockEndTime = 0;          // время окончания блокировки
-        const MAX_CLICKS_PER_SECOND = 20;   // максимум кликов в секунду
-        const BLOCK_DURATION = 2000;         // длительность блокировки в мс
+        let clickTimestamps = [];
+        let isBlocked = false;
+        let blockEndTime = 0;
+        const MAX_CLICKS_PER_SECOND = 20;
+        const BLOCK_DURATION = 2000;
         
         function checkAntiCheat() {
             const now = Date.now();
-            
-            // Убираем клики старше 1 секунды
             clickTimestamps = clickTimestamps.filter(t => now - t < 1000);
             
-            // Проверяем, не заблокирована ли кнопка
             if (isBlocked && now < blockEndTime) {
                 showMessage("⚠️ Античитер: слишком быстрый клик! Подожди немного.", "warning");
                 return false;
             }
             
-            // Снимаем блокировку если время вышло
             if (isBlocked && now >= blockEndTime) {
                 isBlocked = false;
                 document.getElementById('clickBtn').classList.remove('disabled');
             }
             
-            // Проверяем лимит кликов в секунду
             if (clickTimestamps.length >= MAX_CLICKS_PER_SECOND) {
                 isBlocked = true;
                 blockEndTime = now + BLOCK_DURATION;
@@ -619,7 +614,7 @@
         let autoClickerInterval = null;
         let autoClickerEndTime = 0;
         let autoClickerPurchases = 0;
-        let playStartTime = Date.now();
+        let sessionStartTime = Date.now();
         let totalPlayTime = 0;
         
         // Достижения
@@ -737,17 +732,15 @@
         
         function updatePlayTime() {
             const now = Date.now();
-            totalPlayTime = (now - playStartTime) / 1000;
-            const savedTime = localStorage.getItem('totalPlayTime');
-            if (savedTime) {
-                totalPlayTime += parseFloat(savedTime);
-            }
-            document.getElementById('playTimeDisplay').textContent = Math.floor(totalPlayTime);
-            checkAchievements();
+            const sessionTime = (now - sessionStartTime) / 1000;
+            const displayTime = totalPlayTime + sessionTime;
+            document.getElementById('playTimeDisplay').textContent = Math.floor(displayTime);
+            checkAchievements(displayTime);
         }
         
-        function checkAchievements() {
+        function checkAchievements(currentDisplayTime) {
             let newUnlock = false;
+            const displayTime = currentDisplayTime !== undefined ? currentDisplayTime : (totalPlayTime + (Date.now() - sessionStartTime) / 1000);
             
             if (!achNoviceUnlocked && clicks >= 1000) {
                 achNoviceUnlocked = true;
@@ -769,7 +762,7 @@
                 newUnlock = true;
                 showMessage("🏆 ДОСТИЖЕНИЕ: Мастер автокликера! (3 покупки автокликера)", "success");
             }
-            if (!achWorkaholicUnlocked && totalPlayTime >= 86400) {
+            if (!achWorkaholicUnlocked && displayTime >= 86400) {
                 achWorkaholicUnlocked = true;
                 newUnlock = true;
                 showMessage("🏆 ДОСТИЖЕНИЕ: Трудоголик! (1 день в игре)", "success");
@@ -784,16 +777,17 @@
                 updateUI();
                 saveGame();
             }
-            updateAchievementsUI();
+            updateAchievementsUI(displayTime);
         }
         
-        function updateAchievementsUI() {
+        function updateAchievementsUI(currentDisplayTime) {
             const novice = document.getElementById('achNoviceStatus');
             const pro = document.getElementById('achProStatus');
             const million = document.getElementById('achMillionStatus');
             const autoMaster = document.getElementById('achAutoMasterStatus');
             const workaholic = document.getElementById('achWorkaholicStatus');
             const collector = document.getElementById('achCollectorStatus');
+            const displayTime = currentDisplayTime !== undefined ? currentDisplayTime : (totalPlayTime + (Date.now() - sessionStartTime) / 1000);
             
             if (achNoviceUnlocked) { novice.textContent = '✅'; novice.className = 'achievement-status unlocked'; }
             else { novice.textContent = `${formatNumber(1000 - clicks)}/${formatNumber(1000)}`; novice.className = 'achievement-status locked'; }
@@ -809,7 +803,7 @@
             
             if (achWorkaholicUnlocked) { workaholic.textContent = '✅'; workaholic.className = 'achievement-status unlocked'; }
             else { 
-                const remaining = Math.max(0, 86400 - totalPlayTime);
+                const remaining = Math.max(0, 86400 - displayTime);
                 workaholic.textContent = `${Math.floor(remaining)} сек`;
                 workaholic.className = 'achievement-status locked';
             }
@@ -931,7 +925,6 @@
                 event.stopPropagation();
             }
             
-            // ПРОВЕРКА АНТИЧИТА
             if (!checkAntiCheat()) {
                 return false;
             }
@@ -951,13 +944,17 @@
         }
         
         function saveGame() {
+            // Сохраняем общее время (суммируем уже сохранённое + время текущей сессии)
+            const sessionTime = (Date.now() - sessionStartTime) / 1000;
+            const totalTimeToSave = totalPlayTime + sessionTime;
+            
             const saveData = {
                 clicks: Math.floor(clicks),
                 normalUpgrade: normalUpgrade,
                 superUpgrade: superUpgrade,
                 autoClickerEndTime: autoClickerEndTime,
                 autoClickerPurchases: autoClickerPurchases,
-                totalPlayTime: totalPlayTime,
+                totalPlayTime: totalTimeToSave,
                 achNoviceUnlocked: achNoviceUnlocked,
                 achProUnlocked: achProUnlocked,
                 achMillionUnlocked: achMillionUnlocked,
@@ -1019,6 +1016,7 @@
             superUpgrade = 0;
             autoClickerPurchases = 0;
             totalPlayTime = 0;
+            sessionStartTime = Date.now();
             achNoviceUnlocked = false;
             achProUnlocked = false;
             achMillionUnlocked = false;
@@ -1080,6 +1078,9 @@
         loadGame();
         loadLeaderboard();
         
+        // Обновляем sessionStartTime после загрузки
+        sessionStartTime = Date.now();
+        
         let savedState = localStorage.getItem('autosaveEnabled');
         if (savedState === 'true') {
             document.getElementById('autosaveCheckbox').checked = true;
@@ -1088,6 +1089,26 @@
             document.getElementById('autosaveCheckbox').checked = false;
             setAutosaveEnabled(false);
         }
+        
+        // Сохраняем время при закрытии страницы
+        window.addEventListener('beforeunload', function() {
+            const sessionTime = (Date.now() - sessionStartTime) / 1000;
+            const totalTimeToSave = totalPlayTime + sessionTime;
+            localStorage.setItem('clickerSave', JSON.stringify({
+                clicks: Math.floor(clicks),
+                normalUpgrade: normalUpgrade,
+                superUpgrade: superUpgrade,
+                autoClickerEndTime: autoClickerEndTime,
+                autoClickerPurchases: autoClickerPurchases,
+                totalPlayTime: totalTimeToSave,
+                achNoviceUnlocked: achNoviceUnlocked,
+                achProUnlocked: achProUnlocked,
+                achMillionUnlocked: achMillionUnlocked,
+                achAutoMasterUnlocked: achAutoMasterUnlocked,
+                achWorkaholicUnlocked: achWorkaholicUnlocked,
+                achCollectorUnlocked: achCollectorUnlocked
+            }));
+        });
         
         setInterval(() => {
             let corrupted = false;
