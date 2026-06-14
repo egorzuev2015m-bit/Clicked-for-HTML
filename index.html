@@ -878,7 +878,7 @@
         clicks = clicks + gain;
         updatePet(gain);
         
-        const btn = document.getElementById('clickBtn');
+        const btn = document.getElementById('clickBtn').onclick = function() {alert(кнопка работает');
         const rect = btn.getBoundingClientRect();
         showFloatingNumber(rect.left + (rect.width / 2), rect.top + (rect.height / 2), gain, isCrit);
         
