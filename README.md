@@ -4,10 +4,7 @@
 
 ## 📸 Скриншот
 
-<p align="center">
-  <img src="NaGitHub.png" width="300" alt="Скриншот игры">
-</p>
-
+[](NaGitHub.png)
 ## 🎮 Играть
 
 [Кликни чтобы играть!](https://egorzuev2015m-bit.github.io/Clicked-for-HTML/)
