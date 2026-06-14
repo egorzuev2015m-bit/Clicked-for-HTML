@@ -1,7 +1,7 @@
 {
   "game": {
     "name": "Кликер",
-    "version": "3.0"
+    "version": "3.5"
   },
   "upgrades": {
     "normalBaseCost": 20,
@@ -18,5 +18,7 @@
     "novice": 1000,
     "pro": 10000,
     "million": 100000
+    "Trutogolik": "24h"
+    "X2": 50
   }
 }
