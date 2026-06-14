@@ -3,26 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Кликер - Престиж + Пет + Ускорители + Ежедневный бонус</title>
+    <title>Кликер - Полная версия</title>
     <style>
-        /* ======================================================================== */
-        /* ОСНОВНЫЕ СТИЛИ - ПОЛНАЯ ВЕРСИЯ БЕЗ СЖАТИЯ */
-        /* ======================================================================== */
-        
-        /* Сброс стандартных отступов и поведений */
         * {
-            user-select: none;                    /* Запрет выделения текста */
-            -webkit-tap-highlight-color: transparent;  /* Убирает серый фон при тапе на телефоне */
-            box-sizing: border-box;               /* Удобная модель коробки */
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
         
-        /* Отключаем pull-to-refresh на телефонах */
         html, body {
-            touch-action: manipulation;           /* Улучшает отклик на касания */
-            overscroll-behavior: none;            /* Отключает обновление страницы при свайпе вниз */
+            touch-action: manipulation;
+            overscroll-behavior: none;
         }
         
-        /* Основной фон страницы с градиентом */
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
@@ -38,9 +31,6 @@
             overflow-x: hidden;
         }
         
-        /* ======================================================================== */
-        /* АНИМИРОВАННЫЙ ФОН - ЗВЁЗДЫ */
-        /* ======================================================================== */
         .star {
             position: fixed;
             background: white;
@@ -51,23 +41,12 @@
             z-index: 0;
         }
         
-        /* Анимация мерцания звёзд */
         @keyframes twinkle {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
         }
         
-        /* Основной контейнер игры - затемнённый с размытием */
         .container {
             position: relative;
             z-index: 1;
@@ -82,7 +61,6 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
         
-        /* Зона с количеством кликов и кнопкой */
         .clicks-area {
             background: rgba(0, 0, 0, 0.4);
             padding: 20px;
@@ -90,7 +68,6 @@
             margin-bottom: 20px;
         }
         
-        /* Крупное число кликов */
         .clicks {
             font-size: 56px;
             font-weight: bold;
@@ -99,16 +76,12 @@
             text-shadow: 0 0 10px rgba(255, 217, 102, 0.3);
         }
         
-        /* Строки с характеристиками */
         .click-power {
             font-size: 16px;
             color: #4caf50;
             margin: 5px 0;
         }
         
-        /* ======================================================================== */
-        /* ГЛАВНАЯ КНОПКА КЛИКА */
-        /* ======================================================================== */
         .click-btn {
             background: linear-gradient(135deg, #ff4757, #ff6b81);
             color: white;
@@ -126,18 +99,15 @@
             min-width: 200px;
         }
         
-        /* Эффект нажатия на кнопку */
         .click-btn:active {
             transform: scale(0.96);
         }
         
-        /* Заблокированная кнопка (античитер) */
         .click-btn.disabled {
             opacity: 0.5;
             pointer-events: none;
         }
         
-        /* Панель с кнопками сохранения и престижа */
         .save-area {
             display: flex;
             justify-content: center;
@@ -146,7 +116,6 @@
             flex-wrap: wrap;
         }
         
-        /* Общие стили для всех кнопок */
         button {
             cursor: pointer;
             background: linear-gradient(135deg, #ff9800, #f57c00);
@@ -159,38 +128,30 @@
             transition: all 0.1s ease;
         }
         
-        /* Эффект нажатия для всех кнопок */
         button:active {
             transform: scale(0.96);
         }
         
-        /* Отключённые кнопки */
         button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
         
-        /* Специальная кнопка престижа (фиолетовая) */
         .prestige-btn {
             background: linear-gradient(135deg, #9c27b0, #7b1fa2);
         }
         
-        /* Кнопка престижа, когда готова к нажатию (зелёная с анимацией) */
         .prestige-ready {
             background: linear-gradient(135deg, #4caf50, #388e3c) !important;
             animation: pulse 1s infinite;
         }
         
-        /* Анимация пульсации для готового престижа */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.02); }
             100% { transform: scale(1); }
         }
         
-        /* ======================================================================== */
-        /* СЕКЦИИ - универсальный стиль для блоков */
-        /* ======================================================================== */
         .section {
             background: rgba(0, 0, 0, 0.4);
             padding: 15px;
@@ -204,7 +165,6 @@
             font-size: 18px;
         }
         
-        /* Элементы магазина - строки с товарами */
         .shop-item {
             background: rgba(0, 0, 0, 0.35);
             padding: 12px;
@@ -217,9 +177,6 @@
             gap: 10px;
         }
         
-        /* ======================================================================== */
-        /* ДРЕВО НАВЫКОВ - три колонки */
-        /* ======================================================================== */
         .skill-tree {
             display: flex;
             justify-content: space-around;
@@ -260,9 +217,6 @@
             color: #ffd966;
         }
         
-        /* ======================================================================== */
-        /* ИНВЕНТАРЬ И СТАТИСТИКА */
-        /* ======================================================================== */
         .inventory {
             background: rgba(0, 0, 0, 0.35);
             padding: 12px;
@@ -287,9 +241,6 @@
             color: #ffd966;
         }
         
-        /* ======================================================================== */
-        /* СООБЩЕНИЯ И ФУТЕР */
-        /* ======================================================================== */
         .message {
             margin-top: 20px;
             padding: 10px;
@@ -298,11 +249,10 @@
             font-size: 13px;
         }
         
-        .error { color: #ff6b6b; }      /* Красный цвет для ошибок */
-        .success { color: #4caf50; }    /* Зелёный для успеха */
-        .warning { color: #ff9800; }    /* Оранжевый для предупреждений */
+        .error { color: #ff6b6b; }
+        .success { color: #4caf50; }
+        .warning { color: #ff9800; }
         
-        /* Ссылка на GitHub внизу */
         .footer-link {
             margin-top: 20px;
             font-size: 11px;
@@ -313,7 +263,6 @@
             text-decoration: none;
         }
         
-        /* Статус автокликера */
         .autoclicker-status {
             background: #1a237e;
             padding: 5px 12px;
@@ -323,7 +272,6 @@
             margin-top: 8px;
         }
         
-        /* Таймер активного бонуса */
         .bonus-timer {
             background: #ff9800;
             color: #1a1a2e;
@@ -333,9 +281,6 @@
             font-weight: bold;
         }
         
-        /* ======================================================================== */
-        /* АНИМАЦИЯ ВСПЛЫВАЮЩИХ ЧИСЕЛ ПРИ КЛИКЕ */
-        /* ======================================================================== */
         .floating-number {
             position: fixed;
             font-size: 28px;
@@ -349,21 +294,11 @@
         }
         
         @keyframes floatUp {
-            0% {
-                opacity: 1;
-                transform: translateY(0px) scale(0.7);
-            }
-            40% {
-                opacity: 1;
-                transform: translateY(-40px) scale(1.1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-120px) scale(0.6);
-            }
+            0% { opacity: 1; transform: translateY(0px) scale(0.7); }
+            40% { opacity: 1; transform: translateY(-40px) scale(1.1); }
+            100% { opacity: 0; transform: translateY(-120px) scale(0.6); }
         }
         
-        /* Аватар питомца */
         .pet-avatar {
             font-size: 48px;
             margin: 10px 0;
@@ -376,9 +311,6 @@
 </head>
 <body>
 <div class="container">
-    <!-- ======================================================================== -->
-    <!-- ОСНОВНАЯ ЗОНА КЛИКОВ -->
-    <!-- ======================================================================== -->
     <div class="clicks-area">
         <div class="clicks">
             <span id="clickCount">0</span> кликов
@@ -399,10 +331,8 @@
             📊 КПС: <span id="cps">0</span> кликов/сек
         </div>
         
-        <!-- ГЛАВНАЯ КНОПКА КЛИКА -->
         <button class="click-btn" id="clickBtn">КЛИК</button>
         
-        <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
         <div class="save-area">
             <button id="saveBtn">💾 СОХРАНИТЬ</button>
             <button id="dailyBonusBtn" style="background: #4caf50;">🎁 ЕЖЕДНЕВНЫЙ БОНУС</button>
@@ -410,9 +340,6 @@
         </div>
     </div>
 
-    <!-- ======================================================================== -->
-    <!-- ПИТОМЕЦ (PET SYSTEM) -->
-    <!-- ======================================================================== -->
     <div class="section">
         <h4>🐾 ТВОЙ ПИТОМЕЦ 🐾</h4>
         <div class="pet-avatar" id="petAvatar">🐣</div>
@@ -422,9 +349,6 @@
         <progress id="petProgress" value="0" max="100" style="width: 100%; height: 10px; border-radius: 10px;"></progress>
     </div>
 
-    <!-- ======================================================================== -->
-    <!-- МАГАЗИН ВРЕМЕННЫХ УСКОРИТЕЛЕЙ -->
-    <!-- ======================================================================== -->
     <div class="section">
         <h4>⚡ ВРЕМЕННЫЕ УСКОРИТЕЛИ ⚡</h4>
         <div id="activeBoosts" style="margin-bottom: 10px;"></div>
@@ -445,11 +369,7 @@
         </div>
     </div>
 
-    <!-- ======================================================================== -->
-    <!-- ДРЕВО НАВЫКОВ -->
-    <!-- ======================================================================== -->
     <div class="skill-tree">
-        <!-- Ветка Силы -->
         <div class="skill-branch">
             <strong>💪 СИЛА</strong>
             <button class="skill-btn" id="skillPower1">+1 сила (1M)</button>
@@ -457,8 +377,6 @@
             <button class="skill-btn" id="skillPower3">+3 сила (100M)</button>
             <span class="skill-level" id="skillPowerLvl">0/3</span>
         </div>
-        
-        <!-- Ветка Эффективности -->
         <div class="skill-branch">
             <strong>⚡ ЭФФЕКТИВНОСТЬ</strong>
             <button class="skill-btn" id="skillEff1">x2 оффлайн (5M)</button>
@@ -466,8 +384,6 @@
             <button class="skill-btn" id="skillEff3">x8 оффлайн (500M)</button>
             <span class="skill-level" id="skillEffLvl">0/3</span>
         </div>
-        
-        <!-- Ветка Удачи -->
         <div class="skill-branch">
             <strong>🍀 УДАЧА</strong>
             <button class="skill-btn" id="skillLuck1">+5% крит (2M)</button>
@@ -477,9 +393,6 @@
         </div>
     </div>
 
-    <!-- ======================================================================== -->
-    <!-- УЛУЧШЕНИЯ И МАГАЗИН -->
-    <!-- ======================================================================== -->
     <div class="section">
         <h4>📈 УЛУЧШЕНИЯ</h4>
         <div class="shop-item">
@@ -503,50 +416,16 @@
         <div>Куплено X2: <span id="superUpgradeCount">0</span> / 50 | Автокликеров: <span id="autoPurchaseCount">0</span></div>
     </div>
 
-    <!-- ======================================================================== -->
-    <!-- ДОСТИЖЕНИЯ С ПРОГРЕССОМ -->
-    <!-- ======================================================================== -->
     <div class="inventory">
-        <div class="inventory-row">
-            <span>🆕 НОВИЧОК</span>
-            <span class="progress-text" id="achNoviceProgress">0/1000</span>
-            <span id="achNoviceStatus">❌</span>
-        </div>
-        <div class="inventory-row">
-            <span>⭐ ПРОФИ</span>
-            <span class="progress-text" id="achProProgress">0/10000</span>
-            <span id="achProStatus">❌</span>
-        </div>
-        <div class="inventory-row">
-            <span>💰 МИЛЛИОНЕР</span>
-            <span class="progress-text" id="achMillionProgress">0/100K</span>
-            <span id="achMillionStatus">❌</span>
-        </div>
-        <div class="inventory-row">
-            <span>🤖 МАСТЕР АВТО</span>
-            <span class="progress-text" id="achAutoMasterProgress">0/3</span>
-            <span id="achAutoMasterStatus">❌</span>
-        </div>
-        <div class="inventory-row">
-            <span>💪 ТРУДОГОЛИК</span>
-            <span class="progress-text" id="achWorkaholicProgress">0ч/24ч</span>
-            <span id="achWorkaholicStatus">❌</span>
-        </div>
-        <div class="inventory-row">
-            <span>📦 КОЛЛЕКЦИОНЕР</span>
-            <span class="progress-text" id="achCollectorProgress">0/50</span>
-            <span id="achCollectorStatus">❌</span>
-        </div>
-        <div class="inventory-row">
-            <span>🐉 ВЛАСТЕЛИН ПЕТОВ</span>
-            <span class="progress-text" id="achPetMasterProgress">0/20</span>
-            <span id="achPetMasterStatus">❌</span>
-        </div>
+        <div class="inventory-row"><span>🆕 НОВИЧОК</span><span class="progress-text" id="achNoviceProgress">0/1000</span><span id="achNoviceStatus">❌</span></div>
+        <div class="inventory-row"><span>⭐ ПРОФИ</span><span class="progress-text" id="achProProgress">0/10000</span><span id="achProStatus">❌</span></div>
+        <div class="inventory-row"><span>💰 МИЛЛИОНЕР</span><span class="progress-text" id="achMillionProgress">0/100K</span><span id="achMillionStatus">❌</span></div>
+        <div class="inventory-row"><span>🤖 МАСТЕР АВТО</span><span class="progress-text" id="achAutoMasterProgress">0/3</span><span id="achAutoMasterStatus">❌</span></div>
+        <div class="inventory-row"><span>💪 ТРУДОГОЛИК</span><span class="progress-text" id="achWorkaholicProgress">0ч/24ч</span><span id="achWorkaholicStatus">❌</span></div>
+        <div class="inventory-row"><span>📦 КОЛЛЕКЦИОНЕР</span><span class="progress-text" id="achCollectorProgress">0/50</span><span id="achCollectorStatus">❌</span></div>
+        <div class="inventory-row"><span>🐉 ВЛАСТЕЛИН ПЕТОВ</span><span class="progress-text" id="achPetMasterProgress">0/20</span><span id="achPetMasterStatus">❌</span></div>
     </div>
 
-    <!-- ======================================================================== -->
-    <!-- ДОПОЛНИТЕЛЬНАЯ СТАТИСТИКА -->
-    <!-- ======================================================================== -->
     <div class="inventory">
         <div class="inventory-row">📈 Обычных: <span id="normalCount">0</span></div>
         <div class="inventory-row">⚡ X2: <span id="superCount">0</span></div>
@@ -555,9 +434,6 @@
         <div class="inventory-row">🎁 След. бонус: <span id="dailyTimer">доступен</span></div>
     </div>
 
-    <!-- ======================================================================== -->
-    <!-- СООБЩЕНИЯ И ФУТЕР -->
-    <!-- ======================================================================== -->
     <div class="message" id="message">
         👋 Нажми КЛИК чтобы начать!
     </div>
@@ -568,192 +444,102 @@
 
 <script>
     // ========================================================================
-    // 1. ФУНКЦИЯ ФОРМАТИРОВАНИЯ БОЛЬШИХ ЧИСЕЛ (K, M, B, T, Qa, Qi...)
+    // ФУНКЦИЯ ФОРМАТИРОВАНИЯ БОЛЬШИХ ЧИСЕЛ
     // ========================================================================
     function formatNumber(num) {
-        // Если число меньше 1000 - возвращаем как есть, округлённое вниз
-        if (num < 1000) {
-            return Math.floor(num).toString();
-        }
-        
-        // Единицы измерения для больших чисел
+        if (num < 1000) return Math.floor(num).toString();
         const units = ['K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No', 'Dc'];
-        let unitIndex = -1;
-        let value = num;
-        
-        // Делим на 1000 пока не получим число меньше 1000
-        while (value >= 1000 && unitIndex < units.length - 1) {
-            value /= 1000;
-            unitIndex++;
+        let i = -1;
+        let v = num;
+        while (v >= 1000 && i < units.length - 1) {
+            v /= 1000;
+            i++;
         }
-        
-        // Форматируем с одним или двумя знаками после запятой
-        if (value >= 100) {
-            return Math.floor(value) + units[unitIndex];
-        }
-        if (value >= 10) {
-            return value.toFixed(1) + units[unitIndex];
-        }
-        return value.toFixed(2) + units[unitIndex];
+        if (v >= 100) return Math.floor(v) + units[i];
+        if (v >= 10) return v.toFixed(1) + units[i];
+        return v.toFixed(2) + units[i];
     }
 
     // ========================================================================
-    // 2. СОЗДАНИЕ АНИМИРОВАННОГО ФОНА (ЗВЁЗДЫ)
+    // СОЗДАНИЕ ЗВЁЗД НА ФОНЕ
     // ========================================================================
     function createStars() {
-        // Создаём 100 звёзд
         for (let i = 0; i < 100; i++) {
             let star = document.createElement('div');
             star.classList.add('star');
-            
-            // Случайный размер (от 1 до 4 пикселей)
             let size = Math.random() * 3 + 1;
             star.style.width = size + 'px';
             star.style.height = size + 'px';
-            
-            // Случайное положение на экране
             star.style.left = Math.random() * 100 + '%';
             star.style.top = Math.random() * 100 + '%';
-            
-            // Случайная задержка анимации
             star.style.animationDelay = Math.random() * 5 + 's';
             star.style.animationDuration = Math.random() * 3 + 2 + 's';
-            
             document.body.appendChild(star);
         }
     }
-    
-    // Запускаем создание звёзд
     createStars();
 
     // ========================================================================
-    // 3. ОСНОВНЫЕ ПЕРЕМЕННЫЕ ИГРЫ
+    // ПЕРЕМЕННЫЕ ИГРЫ
     // ========================================================================
-    let clicks = 0;                     // Текущее количество кликов (главная валюта)
-    let normalUpgrade = 0;              // Количество купленных обычных улучшений (+1 сила)
-    let superUpgrade = 0;               // Количество купленных X2 улучшений (макс 50)
-    
-    // Переменные для автокликера
-    let autoClickerActive = false;      // Активен ли автокликер
-    let autoClickerEndTime = 0;         // Время окончания работы (timestamp в миллисекундах)
-    let autoClickerPurchases = 0;       // Сколько раз был куплен автокликер (для достижения)
-    let autoClickerInterval = null;     // Интервал автокликера
-    
-    // Переменные для престижа
-    let prestigeLevel = 0;              // Уровень престижа (0-10)
-    let prestigeBonus = 1;              // Множитель престижа (2 в степени уровня)
-    
-    // Переменные для навыков
-    let skillPower = 0;                 // Уровень навыка "Сила" (0-3)
-    let skillEfficiency = 0;            // Уровень навыка "Эффективность" (0-3)
-    let skillLuck = 0;                  // Уровень навыка "Удача" (0-3)
-    
-    // Переменные для достижений
-    let achNovice = false;              // Новичок (1000 кликов)
-    let achPro = false;                 // Профи (10000 кликов)
-    let achMillion = false;             // Миллионер (100000 кликов)
-    let achAutoMaster = false;          // Мастер автокликера (3 покупки)
-    let achWorkaholic = false;          // Трудоголик (24 часа в игре)
-    let achCollector = false;           // Коллекционер (50 X2 улучшений)
-    let achPetMaster = false;           // Властелин петов (20 уровень пета)
-    
-    // Переменные для времени и оффлайн-прогресса
-    let sessionStartTime = Date.now();   // Время начала текущей сессии
-    let totalPlayTime = 0;               // Общее время игры (сумма всех сессий)
-    let lastSaveTime = Date.now();       // Время последнего сохранения (для оффлайн-расчёта)
-    let pendingOfflineGain = 0;          // Накопленный оффлайн-бонус (ожидает получения)
-    
-    // Переменные для античитера
-    let clickTimestamps = [];            // Массив времен последних кликов
-    let isBlocked = false;               // Заблокирована ли кнопка
-    let blockEndTime = 0;                // Время окончания блокировки
-    const MAX_CLICKS_PER_SECOND = 20;    // Максимум кликов в секунду (20)
-    const BLOCK_DURATION = 2000;         // Длительность блокировки в миллисекундах (2 секунды)
-    
-    // Переменные для питомца
-    let petLevel = 0;                    // Уровень питомца (0-20)
-    let petClicks = 0;                  // Накоплено кликов для уровня
-    
-    // Требования для уровней питомца (кумулятивно)
-    const PET_LEVELS = [
-        0,          // уровень 0 -> 1 (0 кликов)
-        100,        // уровень 1 -> 2 (100 кликов)
-        500,        // уровень 2 -> 3 (500 кликов)
-        2000,       // уровень 3 -> 4 (2000)
-        5000,       // уровень 4 -> 5 (5000)
-        10000,      // уровень 5 -> 6
-        20000,      // уровень 6 -> 7
-        35000,      // уровень 7 -> 8
-        55000,      // уровень 8 -> 9
-        80000,      // уровень 9 -> 10
-        110000,     // уровень 10 -> 11
-        150000,     // уровень 11 -> 12
-        200000,     // уровень 12 -> 13
-        260000,     // уровень 13 -> 14
-        330000,     // уровень 14 -> 15
-        410000,     // уровень 15 -> 16
-        500000,     // уровень 16 -> 17
-        600000,     // уровень 17 -> 18
-        710000,     // уровень 18 -> 19
-        830000,     // уровень 19 -> 20
-        1000000     // уровень 20 (максимум)
-    ];
-    
-    // Функция получения бонуса от питомца (5% за уровень)
+    let clicks = 0;
+    let normalUpgrade = 0;
+    let superUpgrade = 0;
+    let autoClickerActive = false;
+    let autoClickerEndTime = 0;
+    let autoClickerPurchases = 0;
+    let autoClickerInterval = null;
+    let prestigeLevel = 0;
+    let prestigeBonus = 1;
+    let skillPower = 0;
+    let skillEfficiency = 0;
+    let skillLuck = 0;
+    let achNovice = false;
+    let achPro = false;
+    let achMillion = false;
+    let achAutoMaster = false;
+    let achWorkaholic = false;
+    let achCollector = false;
+    let achPetMaster = false;
+    let sessionStartTime = Date.now();
+    let totalPlayTime = 0;
+    let lastSaveTime = Date.now();
+    let pendingOfflineGain = 0;
+    let clickTimestamps = [];
+    let isBlocked = false;
+    let blockEndTime = 0;
+    const MAX_CLICKS_PER_SECOND = 20;
+    const BLOCK_DURATION = 2000;
+    let petLevel = 0;
+    let petClicks = 0;
+    const PET_LEVELS = [0, 100, 500, 2000, 5000, 10000, 20000, 35000, 55000, 80000, 110000, 150000, 200000, 260000, 330000, 410000, 500000, 600000, 710000, 830000, 1000000];
+    let activeBoost = { multiplier: 1, endTime: 0 };
+    let cpsHistory = [];
+    let lastCpsUpdate = Date.now();
+    const PRESTIGE_REQUIREMENTS = [0, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000, 10000000000000, 100000000000000, 1000000000000000];
+
+    // ========================================================================
+    // БОНУС ПИТОМЦА
+    // ========================================================================
     function getPetBonus() {
         return petLevel * 5;
     }
-    
-    // Переменные для временных ускорителей
-    let activeBoost = {
-        multiplier: 1,      // Текущий множитель (1, 2, 5, 10)
-        endTime: 0          // Время окончания действия (timestamp)
-    };
-    let boostInterval = null;
-    
-    // Переменная для ежедневного бонуса (хранится время последнего получения)
-    let lastDailyBonus = 0;
-    const DAILY_BONUS_AMOUNT = 100000;   // 100 000 кликов за ежедневный бонус
-    
-    // Переменные для КПС (кликов в секунду)
-    let cpsHistory = [];     // Массив кликов за последние полсекунды
-    let lastCpsUpdate = Date.now();
-    
-    // Требования для престижа (в кликах)
-    const PRESTIGE_REQUIREMENTS = [
-        0,          // уровень 0 -> 1
-        1000000,    // 1 уровень: 1 млн
-        10000000,   // 2 уровень: 10 млн
-        100000000,  // 3 уровень: 100 млн
-        1000000000, // 4 уровень: 1 млрд
-        10000000000,// 5 уровень: 10 млрд
-        100000000000,// 6 уровень: 100 млрд
-        1000000000000,// 7 уровень: 1 трлн
-        10000000000000,// 8 уровень: 10 трлн
-        100000000000000,// 9 уровень: 100 трлн
-        1000000000000000 // 10 уровень: 1 квдр
-    ];
 
     // ========================================================================
-    // 4. ФУНКЦИИ РАСЧЁТА (стоимости, силы клика и т.д.)
+    // СТОИМОСТИ И СИЛА КЛИКА
     // ========================================================================
-    
-    // Стоимость обычного улучшения (20 + 10 за каждое купленное)
     function getNormalUpgradeCost() {
         return 20 + (normalUpgrade * 10);
     }
     
-    // Стоимость X2 улучшения (10 000 + 10 млн за каждое купленное)
     function getSuperUpgradeCost() {
         return 10000 + (superUpgrade * 10000000);
     }
     
-    // Бонус от навыка Сила (+0..+3 к базовой силе)
     function getSkillPowerBonus() {
         return skillPower;
     }
     
-    // Шанс критического удара (0% / 5% / 10% / 20%)
     function getCritChance() {
         if (skillLuck === 0) return 0;
         if (skillLuck === 1) return 0.05;
@@ -761,22 +547,18 @@
         return 0.20;
     }
     
-    // Множитель критического удара (всегда x2)
     function getCritMultiplier() {
         return 2;
     }
     
-    // Бонус от достижения "Миллионер" (+10 к силе)
     function getAchievementBonus() {
         return achMillion ? 10 : 0;
     }
     
-    // Бонус от достижения "Коллекционер" (x10 к множителю)
     function getCollectorBonus() {
         return achCollector ? 10 : 1;
     }
     
-    // Множитель от временных ускорителей
     function getBoostMultiplier() {
         if (Date.now() < activeBoost.endTime) {
             return activeBoost.multiplier;
@@ -784,61 +566,42 @@
         return 1;
     }
     
-    // ИТОГОВАЯ СИЛА КЛИКА (основная формула)
     function getTotalClickPower() {
-        // Бонус от питомца (в процентах)
         let petPercent = 1 + (getPetBonus() / 100);
-        
-        // Базовая сила: 1 + обычные улучшения + бонус навыка + бонус достижения
         let basePower = 1 + normalUpgrade + getSkillPowerBonus() + getAchievementBonus();
-        
-        // Умножаем на бонус престижа и бонус питомца
         basePower = basePower * prestigeBonus * petPercent;
-        
-        // Множитель: 2^(количество X2) * бонус коллекционера * бонус ускорителя
         let multiplier = Math.pow(2, superUpgrade) * getCollectorBonus() * getBoostMultiplier();
-        
-        // Итоговая сила клика
         return Math.floor(basePower * multiplier);
     }
 
     // ========================================================================
-    // 5. ОБНОВЛЕНИЕ КПС (КЛИКОВ В СЕКУНДУ)
+    // КПС (КЛИКИ В СЕКУНДУ)
     // ========================================================================
     function updateCPS() {
         const now = Date.now();
         const deltaSec = (now - lastCpsUpdate) / 1000;
-        
-        // Обновляем КПС каждые 0.5 секунды
         if (deltaSec >= 0.5 && cpsHistory.length > 0) {
             let totalClicks = 0;
             for (let i = 0; i < cpsHistory.length; i++) {
                 totalClicks += cpsHistory[i];
             }
-            // Каждый элемент в cpsHistory - это количество кликов за 0.5 секунды
             let cps = totalClicks / (cpsHistory.length * 0.5);
             document.getElementById('cps').textContent = Math.floor(cps);
-            
-            // Очищаем историю
             cpsHistory = [];
             lastCpsUpdate = now;
         }
     }
     
-    // Добавляем клик в историю для КПС
     function addClickToCPS() {
         cpsHistory.push(1);
     }
 
     // ========================================================================
-    // 6. АНИМАЦИЯ ВСПЛЫВАЮЩИХ ЧИСЕЛ
+    // АНИМАЦИЯ ВСПЛЫВАЮЩИХ ЧИСЕЛ
     // ========================================================================
-    function showFloatingNumber(x, y, value, isCrit = false) {
-        // Создаём div с числом
+    function showFloatingNumber(x, y, value, isCrit) {
         const div = document.createElement('div');
         div.className = 'floating-number';
-        
-        // Форматируем текст
         if (isCrit) {
             div.textContent = '💥 КРИТ! +' + formatNumber(value);
             div.style.color = '#ff9800';
@@ -846,29 +609,17 @@
             div.textContent = '+' + formatNumber(value);
             div.style.color = '#4caf50';
         }
-        
-        // Позиционируем около кнопки
         div.style.left = (x - 40) + 'px';
         div.style.top = (y - 60) + 'px';
-        
-        // Добавляем на страницу
         document.body.appendChild(div);
-        
-        // Удаляем через 900 мс (после окончания анимации)
-        setTimeout(function() {
-            if (div && div.remove) {
-                div.remove();
-            }
-        }, 900);
+        setTimeout(function() { if (div && div.remove) div.remove(); }, 900);
     }
 
     // ========================================================================
-    // 7. АНТИЧИТЕР (ЗАЩИТА ОТ АВТОКЛИКЕРОВ)
+    // АНТИЧИТЕР
     // ========================================================================
     function checkAntiCheat() {
         const now = Date.now();
-        
-        // Удаляем клики, которые были больше 1 секунды назад
         let newTimestamps = [];
         for (let i = 0; i < clickTimestamps.length; i++) {
             if (now - clickTimestamps[i] < 1000) {
@@ -877,73 +628,56 @@
         }
         clickTimestamps = newTimestamps;
         
-        // Если кнопка заблокирована и время ещё не вышло
         if (isBlocked && now < blockEndTime) {
-            showMessage("⚠️ АНТИЧИТЕР: слишком быстрый клик! Подожди немного.", "warning");
+            showMessage("⚠️ Слишком быстро! Подожди.", "warning");
             return false;
         }
         
-        // Снимаем блокировку, если время вышло
         if (isBlocked && now >= blockEndTime) {
             isBlocked = false;
             document.getElementById('clickBtn').classList.remove('disabled');
         }
         
-        // Проверяем лимит кликов в секунду
         if (clickTimestamps.length >= MAX_CLICKS_PER_SECOND) {
             isBlocked = true;
             blockEndTime = now + BLOCK_DURATION;
             document.getElementById('clickBtn').classList.add('disabled');
-            showMessage("🚨 ОБНАРУЖЕН АВТОКЛИКЕР! Кнопка заблокирована на 2 секунды.", "error");
+            showMessage("🚨 АВТОКЛИКЕР! Кнопка заблокирована на 2 сек.", "error");
             return false;
         }
         
         return true;
     }
     
-    // Добавляем текущее время в историю кликов
     function addClickTimestamp() {
         clickTimestamps.push(Date.now());
     }
 
     // ========================================================================
-    // 8. ОФФЛАЙН-ПРОГРЕСС (КЛИКИ ЗА ВРЕМЯ ОТСУТСТВИЯ)
+    // ОФФЛАЙН ПРОГРЕСС
     // ========================================================================
     function checkOfflineProgress() {
         const now = Date.now();
         let diffSeconds = (now - lastSaveTime) / 1000;
-        
-        // Максимум 24 часа отсутствия
-        if (diffSeconds > 24 * 3600) {
-            diffSeconds = 24 * 3600;
-        }
-        
-        // Если отсутствовал больше минуты (60 секунд)
+        if (diffSeconds > 24 * 3600) diffSeconds = 24 * 3600;
         if (diffSeconds > 60) {
-            // Множитель от навыка эффективности (x2/x4/x8)
             let offlineMultiplier = 1;
             if (skillEfficiency === 1) offlineMultiplier = 2;
             if (skillEfficiency === 2) offlineMultiplier = 4;
             if (skillEfficiency === 3) offlineMultiplier = 8;
-            
             let offlineGain = getTotalClickPower() * diffSeconds * offlineMultiplier;
             offlineGain = Math.floor(offlineGain);
-            
             if (offlineGain > 0) {
                 pendingOfflineGain = offlineGain;
-                // Показываем карточку с оффлайн-бонусом
-                showMessage("📥 Оффлайн-бонус доступен! Нажми 'Забрать' вверху.", "success");
             }
         }
-        
         lastSaveTime = now;
     }
     
-    // Забрать оффлайн-бонус (вызывается при загрузке)
     function claimOfflineIfExists() {
         if (pendingOfflineGain > 0) {
             clicks += pendingOfflineGain;
-            showMessage("📥 ПОЛУЧЕНО: +" + formatNumber(pendingOfflineGain) + " кликов за время отсутствия!", "success");
+            showMessage("📥 +" + formatNumber(pendingOfflineGain) + " кликов за время отсутствия!", "success");
             pendingOfflineGain = 0;
             updateUI();
             saveGame();
@@ -951,34 +685,77 @@
     }
 
     // ========================================================================
-    // 9. ПРЕСТИЖ (ПЕРЕРОЖДЕНИЕ С БОНУСОМ x2 ЗА УРОВЕНЬ)
+    // ПИТОМЕЦ
+    // ========================================================================
+    function updatePet(clickGain) {
+        petClicks = petClicks + clickGain;
+        while (petLevel < 20 && petClicks >= PET_LEVELS[petLevel + 1]) {
+            petLevel = petLevel + 1;
+            showMessage("🐉 ПИТОМЕЦ ПРОКАЧАН! Уровень " + petLevel + " (+5% к силе)", "success");
+        }
+        if (petLevel >= 20 && !achPetMaster) {
+            achPetMaster = true;
+            showMessage("🏆 ДОСТИЖЕНИЕ: ВЛАСТЕЛИН ПЕТОВ! (уровень 20)", "success");
+            updateUI();
+            saveGame();
+        }
+    }
+
+    // ========================================================================
+    // УСКОРИТЕЛИ
+    // ========================================================================
+    function activateBoost(multiplier, durationSeconds, cost) {
+        if (clicks >= cost) {
+            clicks = clicks - cost;
+            activeBoost = { multiplier: multiplier, endTime: Date.now() + (durationSeconds * 1000) };
+            showMessage("🔥 x" + multiplier + " на " + durationSeconds + " сек!", "success");
+            updateUI();
+            saveGame();
+        } else {
+            showMessage("❌ Нужно " + formatNumber(cost) + " кликов!", "error");
+        }
+    }
+
+    // ========================================================================
+    // ЕЖЕДНЕВНЫЙ БОНУС
+    // ========================================================================
+    function claimDailyBonus() {
+        let lastBonusTime = localStorage.getItem('dailyBonusTime');
+        if (lastBonusTime === null) lastBonusTime = 0;
+        else lastBonusTime = parseInt(lastBonusTime);
+        
+        let now = Date.now();
+        let hoursSinceLast = (now - lastBonusTime) / (1000 * 60 * 60);
+        
+        if (hoursSinceLast >= 24) {
+            clicks = clicks + 100000;
+            localStorage.setItem('dailyBonusTime', now.toString());
+            showMessage("🎁 ЕЖЕДНЕВНЫЙ БОНУС: +100 000 кликов!", "success");
+            updateUI();
+            saveGame();
+        } else {
+            let hoursLeft = Math.ceil(24 - hoursSinceLast);
+            showMessage("⚠️ Бонус через " + hoursLeft + " часов.", "warning");
+        }
+    }
+
+    // ========================================================================
+    // ПРЕСТИЖ
     // ========================================================================
     function doPrestige() {
-        // Проверяем, есть ли следующий уровень престижа
-        const nextRequirement = PRESTIGE_REQUIREMENTS[prestigeLevel + 1];
-        
-        if (!nextRequirement) {
-            showMessage("🌟 МАКСИМАЛЬНЫЙ УРОВЕНЬ ПРЕСТИЖА ДОСТИГНУТ! (10/10)", "warning");
+        const nextReq = PRESTIGE_REQUIREMENTS[prestigeLevel + 1];
+        if (!nextReq) {
+            showMessage("🌟 Максимальный престиж! (10/10)", "warning");
+            return;
+        }
+        if (clicks < nextReq) {
+            showMessage("❌ Нужно " + formatNumber(nextReq) + " кликов!", "error");
             return;
         }
         
-        if (clicks < nextRequirement) {
-            showMessage("❌ Для престижа нужно " + formatNumber(nextRequirement) + " кликов! У тебя " + formatNumber(clicks) + ".", "error");
-            return;
-        }
-        
-        // Подтверждение от игрока
-        let confirmMessage = "🌟 ПЕРЕРОДИТЬСЯ В ПРЕСТИЖ ДО " + (prestigeLevel + 1) + " УРОВНЯ?\n\n";
-        confirmMessage += "✨ БОНУС: x2 к силе клика (всего станет x" + (prestigeBonus * 2) + ")\n";
-        confirmMessage += "⚠️ ПОТЕРЯЕШЬ: все клики, улучшения, навыки, активный автокликер\n";
-        confirmMessage += "✅ ДОСТИЖЕНИЯ останутся!\n\nПродолжить?";
-        
-        if (confirm(confirmMessage)) {
-            // Повышаем уровень престижа
+        if (confirm("🌟 ПРЕСТИЖ ДО " + (prestigeLevel + 1) + " УРОВНЯ?\nБонус: x2 к силе\nСброс: клики, улучшения, навыки, пет\nПродолжить?")) {
             prestigeLevel = prestigeLevel + 1;
             prestigeBonus = Math.pow(2, prestigeLevel);
-            
-            // Сбрасываем всё, кроме достижений
             clicks = 0;
             normalUpgrade = 0;
             superUpgrade = 0;
@@ -986,263 +763,37 @@
             skillEfficiency = 0;
             skillLuck = 0;
             autoClickerPurchases = 0;
-            
-            // Сбрасываем питомца
             petLevel = 0;
             petClicks = 0;
-            
-            // Сбрасываем ускорители
-            activeBoost = {
-                multiplier: 1,
-                endTime: 0
-            };
-            
-            // Останавливаем автокликер
+            activeBoost = { multiplier: 1, endTime: 0 };
             if (autoClickerInterval !== null) {
                 clearInterval(autoClickerInterval);
                 autoClickerInterval = null;
                 autoClickerActive = false;
             }
-            
             updateUI();
             saveGame();
-            showMessage("✨ ПОЗДРАВЛЯЮ! ПРЕСТИЖ УРОВЕНЬ " + prestigeLevel + "! Бонус x" + prestigeBonus + " к силе клика! ✨", "success");
+            showMessage("✨ ПРЕСТИЖ " + prestigeLevel + "! Бонус x" + prestigeBonus, "success");
         }
     }
 
     // ========================================================================
-    // 10. ФУНКЦИЯ ДЛЯ ПРОКАЧКИ ПИТОМЦА
+    // ПОКУПКА НАВЫКОВ
     // ========================================================================
-    function updatePet(clickGain) {
-        // Добавляем клики к прогрессу питомца
-        petClicks = petClicks + clickGain;
-        
-        // Проверяем, не пора ли повысить уровень
-        while (petLevel < 20 && petClicks >= PET_LEVELS[petLevel + 1]) {
-            petLevel = petLevel + 1;
-            showMessage("🐉 ПИТОМЕЦ ПРОКАЧАН! Уровень " + petLevel + " (+5% к силе клика)", "success");
-        }
-        
-        // Проверяем достижение "Властелин петов"
-        if (petLevel >= 20 && achPetMaster === false) {
-            achPetMaster = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: ВЛАСТЕЛИН ПЕТОВ! (уровень питомца 20)", "success");
+    function buySkill(level, cost, setter, name) {
+        if (clicks >= cost) {
+            clicks = clicks - cost;
+            setter();
             updateUI();
             saveGame();
+            showMessage("🎯 " + name + " куплен!", "success");
+        } else {
+            showMessage("❌ Нужно " + formatNumber(cost) + " кликов!", "error");
         }
     }
 
     // ========================================================================
-    // 11. АКТИВАЦИЯ ВРЕМЕННЫХ УСКОРИТЕЛЕЙ
-    // ========================================================================
-    function activateBoost(multiplier, durationSeconds, cost) {
-        if (clicks >= cost) {
-            // Списываем стоимость
-            clicks = clicks - cost;
-            
-            // Активируем ускоритель
-            activeBoost = {
-                multiplier: multiplier,
-                endTime: Date.now() + (durationSeconds * 1000)
-            };
-            
-            showMessage("🔥 x" + multiplier + " УСКОРИТЕЛЬ АКТИВИРОВАН! Длительность: " + durationSeconds + " секунд.", "success");
-            updateUI();
-            saveGame();
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-
-    // ========================================================================
-    // 12. ЕЖЕДНЕВНЫЙ БОНУС
-    // ========================================================================
-    function claimDailyBonus() {
-        // Получаем время последнего бонуса из localStorage
-        let lastBonusTime = localStorage.getItem('dailyBonusTime');
-        if (lastBonusTime === null) {
-            lastBonusTime = 0;
-        } else {
-            lastBonusTime = parseInt(lastBonusTime);
-        }
-        
-        let now = Date.now();
-        let hoursSinceLast = (now - lastBonusTime) / (1000 * 60 * 60);
-        
-        if (hoursSinceLast >= 24) {
-            // Добавляем бонус
-            clicks = clicks + DAILY_BONUS_AMOUNT;
-            
-            // Сохраняем время получения
-            localStorage.setItem('dailyBonusTime', now.toString());
-            
-            showMessage("🎁 ЕЖЕДНЕВНЫЙ БОНУС: +" + formatNumber(DAILY_BONUS_AMOUNT) + " кликов!", "success");
-            updateUI();
-            saveGame();
-        } else {
-            let hoursLeft = Math.ceil(24 - hoursSinceLast);
-            showMessage("⚠️ Бонус можно получить раз в 24 часа! Следующий через " + hoursLeft + " часов.", "warning");
-        }
-    }
-
-    // ========================================================================
-    // 13. ПОКУПКА НАВЫКОВ
-    // ========================================================================
-    function buySkillPower1() {
-        if (skillPower >= 1) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 1000000; // 1 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillPower = 1;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: +1 к силе (уровень 1)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillPower2() {
-        if (skillPower >= 2) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 10000000; // 10 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillPower = 2;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: +2 к силе (уровень 2)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillPower3() {
-        if (skillPower >= 3) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 100000000; // 100 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillPower = 3;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: +3 к силе (уровень 3)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillEff1() {
-        if (skillEfficiency >= 1) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 5000000; // 5 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillEfficiency = 1;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: x2 оффлайн-доход (уровень 1)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillEff2() {
-        if (skillEfficiency >= 2) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 50000000; // 50 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillEfficiency = 2;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: x4 оффлайн-доход (уровень 2)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillEff3() {
-        if (skillEfficiency >= 3) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 500000000; // 500 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillEfficiency = 3;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: x8 оффлайн-доход (уровень 3)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillLuck1() {
-        if (skillLuck >= 1) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 2000000; // 2 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillLuck = 1;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: +5% шанс крита (уровень 1)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillLuck2() {
-        if (skillLuck >= 2) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 20000000; // 20 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillLuck = 2;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: +10% шанс крита (уровень 2)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-    
-    function buySkillLuck3() {
-        if (skillLuck >= 3) {
-            showMessage("Навык уже куплен!", "warning");
-            return;
-        }
-        const cost = 200000000; // 200 млн
-        if (clicks >= cost) {
-            clicks = clicks - cost;
-            skillLuck = 3;
-            updateUI();
-            saveGame();
-            showMessage("🎯 НАВЫК ПОЛУЧЕН: +20% шанс крита (уровень 3)!", "success");
-        } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
-        }
-    }
-
-    // ========================================================================
-    // 14. ПОКУПКА УЛУЧШЕНИЙ (ОБЫЧНЫЕ, X2, АВТОКЛИКЕР)
+    // ПОКУПКА УЛУЧШЕНИЙ
     // ========================================================================
     function buyNormalUpgrade() {
         const cost = getNormalUpgradeCost();
@@ -1251,15 +802,15 @@
             normalUpgrade = normalUpgrade + 1;
             updateUI();
             saveGame();
-            showMessage("💪 УЛУЧШЕНИЕ КУПЛЕНО! Сила клика +1 (теперь " + getTotalClickPower() + ")", "success");
+            showMessage("💪 Улучшение! Сила +1", "success");
         } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
+            showMessage("❌ Нужно " + formatNumber(cost) + " кликов!", "error");
         }
     }
     
     function buySuperUpgrade() {
         if (superUpgrade >= 50) {
-            showMessage("⚡ ДОСТИГНУТ МАКСИМУМ! Нельзя купить больше 50 X2 улучшений.", "warning");
+            showMessage("⚡ Лимит 50 X2!", "warning");
             return;
         }
         const cost = getSuperUpgradeCost();
@@ -1268,589 +819,330 @@
             superUpgrade = superUpgrade + 1;
             updateUI();
             saveGame();
-            showMessage("⚡ X2 УЛУЧШЕНИЕ КУПЛЕНО! Множитель теперь x" + Math.pow(2, superUpgrade), "success");
+            showMessage("⚡ X2 улучшение куплено!", "success");
         } else {
-            showMessage("❌ Не хватает кликов! Нужно " + formatNumber(cost) + ".", "error");
+            showMessage("❌ Нужно " + formatNumber(cost) + " кликов!", "error");
         }
     }
     
     function buyAutoClicker() {
-        const cost = 10000000000; // 10 миллиардов
+        const cost = 10000000000;
         if (clicks >= cost) {
             clicks = clicks - cost;
             autoClickerPurchases = autoClickerPurchases + 1;
             
             if (autoClickerActive) {
-                // Продлеваем время работы текущего автокликера
                 autoClickerEndTime = autoClickerEndTime + (1200 * 1000);
-                showMessage("🤖 АВТОКЛИКЕР ПРОДЛЁН! +20 минут работы. (Всего куплено: " + autoClickerPurchases + ")", "success");
             } else {
-                // Запускаем новый автокликер
                 autoClickerEndTime = Date.now() + (1200 * 1000);
                 autoClickerActive = true;
-                
-                // Останавливаем старый интервал если есть
-                if (autoClickerInterval !== null) {
-                    clearInterval(autoClickerInterval);
-                }
-                
-                // Запускаем новый интервал
+                if (autoClickerInterval !== null) clearInterval(autoClickerInterval);
                 autoClickerInterval = setInterval(function() {
-                    const now = Date.now();
-                    if (now >= autoClickerEndTime) {
-                        // Время вышло - останавливаем
+                    if (Date.now() >= autoClickerEndTime) {
                         clearInterval(autoClickerInterval);
                         autoClickerInterval = null;
                         autoClickerActive = false;
                         updateUI();
-                        showMessage("🤖 Автокликер закончил работу.", "success");
                     } else {
-                        // Добавляем клики
-                        const gain = getTotalClickPower();
-                        clicks = clicks + gain;
+                        clicks = clicks + getTotalClickPower();
                         updateUI();
                     }
                 }, 1000);
-                
-                showMessage("🤖 АВТОКЛИКЕР ЗАПУЩЕН! Работает 20 минут. (Всего куплено: " + autoClickerPurchases + ")", "success");
             }
             updateUI();
             saveGame();
+            showMessage("🤖 Автокликер +20 мин! (" + autoClickerPurchases + ")", "success");
         } else {
-            showMessage("❌ Не хватает кликов! Автокликер стоит 10 000 000 000 (10B) кликов.", "error");
+            showMessage("❌ Нужно 10B кликов!", "error");
         }
     }
 
     // ========================================================================
-    // 15. ОСНОВНАЯ ФУНКЦИЯ КЛИКА
+    // ОСНОВНОЙ КЛИК
     // ========================================================================
     function handleClick(event) {
-        // Предотвращаем стандартное поведение браузера
         if (event) {
             event.preventDefault();
             event.stopPropagation();
         }
         
-        // Проверка античитера
-        if (!checkAntiCheat()) {
-            return false;
-        }
+        if (!checkAntiCheat()) return false;
         addClickTimestamp();
         addClickToCPS();
         updateCPS();
         
-        // Расчёт получаемых кликов
         let gain = getTotalClickPower();
-        let isCrit = false;
+        let isCrit = Math.random() < getCritChance();
+        if (isCrit) gain = gain * 2;
         
-        // Проверка крита
-        if (Math.random() < getCritChance()) {
-            gain = gain * getCritMultiplier();
-            isCrit = true;
-        }
-        
-        // Добавляем клики
         clicks = clicks + gain;
-        
-        // Обновляем прогресс питомца
         updatePet(gain);
         
-        // Анимация всплывающего числа
         const btn = document.getElementById('clickBtn');
         const rect = btn.getBoundingClientRect();
         showFloatingNumber(rect.left + (rect.width / 2), rect.top + (rect.height / 2), gain, isCrit);
         
-        // Сообщение при крите
-        if (isCrit) {
-            showMessage("⚡ КРИТИЧЕСКИЙ УДАР! x" + getCritMultiplier() + " (получено " + formatNumber(gain) + " кликов)", "success");
-        }
+        if (isCrit) showMessage("⚡ КРИТ! x2", "success");
         
-        // Визуальный отклик кнопки
         btn.style.transform = 'scale(0.95)';
-        setTimeout(function() {
-            btn.style.transform = '';
-        }, 100);
+        setTimeout(function() { btn.style.transform = ''; }, 100);
         
-        // Обновление интерфейса и сохранение
         updateUI();
         saveGame();
-        
         return false;
     }
 
     // ========================================================================
-    // 16. ОБНОВЛЕНИЕ ПРОГРЕССА ДОСТИЖЕНИЙ В ИНТЕРФЕЙСЕ
-    // ========================================================================
-    function updateAchievementsProgress() {
-        // Новичок (1000)
-        if (achNovice) {
-            document.getElementById('achNoviceProgress').innerHTML = "✅ 1 000 / 1 000";
-            document.getElementById('achNoviceStatus').innerHTML = '✅';
-        } else {
-            document.getElementById('achNoviceProgress').innerHTML = formatNumber(clicks) + " / 1 000";
-            document.getElementById('achNoviceStatus').innerHTML = '❌';
-        }
-        
-        // Профи (10 000)
-        if (achPro) {
-            document.getElementById('achProProgress').innerHTML = "✅ 10 000 / 10 000";
-            document.getElementById('achProStatus').innerHTML = '✅';
-        } else {
-            document.getElementById('achProProgress').innerHTML = formatNumber(clicks) + " / 10 000";
-            document.getElementById('achProStatus').innerHTML = '❌';
-        }
-        
-        // Миллионер (100 000)
-        if (achMillion) {
-            document.getElementById('achMillionProgress').innerHTML = "✅ 100 000 / 100 000";
-            document.getElementById('achMillionStatus').innerHTML = '✅';
-        } else {
-            document.getElementById('achMillionProgress').innerHTML = formatNumber(clicks) + " / 100 000";
-            document.getElementById('achMillionStatus').innerHTML = '❌';
-        }
-        
-        // Мастер автокликера (3 покупки)
-        if (achAutoMaster) {
-            document.getElementById('achAutoMasterProgress').innerHTML = "✅ 3 / 3";
-            document.getElementById('achAutoMasterStatus').innerHTML = '✅';
-        } else {
-            document.getElementById('achAutoMasterProgress').innerHTML = autoClickerPurchases + " / 3";
-            document.getElementById('achAutoMasterStatus').innerHTML = '❌';
-        }
-        
-        // Коллекционер (50 X2)
-        if (achCollector) {
-            document.getElementById('achCollectorProgress').innerHTML = "✅ 50 / 50";
-            document.getElementById('achCollectorStatus').innerHTML = '✅';
-        } else {
-            document.getElementById('achCollectorProgress').innerHTML = superUpgrade + " / 50";
-            document.getElementById('achCollectorStatus').innerHTML = '❌';
-        }
-        
-        // Властелин петов (20 уровень)
-        if (achPetMaster) {
-            document.getElementById('achPetMasterProgress').innerHTML = "✅ 20 / 20";
-            document.getElementById('achPetMasterStatus').innerHTML = '✅';
-        } else {
-            document.getElementById('achPetMasterProgress').innerHTML = petLevel + " / 20";
-            document.getElementById('achPetMasterStatus').innerHTML = '❌';
-        }
-        
-        // Трудоголик (24 часа)
-        const currentTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
-        const hours = Math.floor(currentTime / 3600);
-        const minutes = Math.floor((currentTime % 3600) / 60);
-        if (achWorkaholic) {
-            document.getElementById('achWorkaholicProgress').innerHTML = "✅ 24ч 00м / 24ч";
-            document.getElementById('achWorkaholicStatus').innerHTML = '✅';
-        } else {
-            document.getElementById('achWorkaholicProgress').innerHTML = hours + "ч " + minutes + "м / 24ч";
-            document.getElementById('achWorkaholicStatus').innerHTML = '❌';
-        }
-    }
-
-    // ========================================================================
-    // 17. ОБНОВЛЕНИЕ ВСЕГО ИНТЕРФЕЙСА
+    // ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
     // ========================================================================
     function updateUI() {
-        // Основные показатели
         document.getElementById('clickCount').innerHTML = formatNumber(clicks);
         document.getElementById('clickPower').innerHTML = getTotalClickPower();
         document.getElementById('prestigeBonus').innerHTML = prestigeBonus;
         document.getElementById('critChance').innerHTML = Math.floor(getCritChance() * 100);
         document.getElementById('petBonus').innerHTML = getPetBonus();
         document.getElementById('petBonusDisplay').innerHTML = getPetBonus();
-        
-        // Питомец
         document.getElementById('petLevel').innerHTML = petLevel;
-        let nextPetCost = PET_LEVELS[petLevel + 1];
-        if (nextPetCost === undefined) {
-            nextPetCost = PET_LEVELS[20];
-        }
+        
+        let nextPetCost = PET_LEVELS[petLevel + 1] || PET_LEVELS[20];
         let petPercent = (petClicks / nextPetCost) * 100;
         if (petPercent > 100) petPercent = 100;
         document.getElementById('petProgress').value = petPercent;
         document.getElementById('petNextProgress').innerHTML = formatNumber(petClicks) + " / " + formatNumber(nextPetCost);
         
-        // Эволюция питомца по аватару
         let petEmojis = ['🐣', '🐥', '🐔', '🦅', '🦉', '🐉'];
         let petIndex = Math.floor(petLevel / 4);
         if (petIndex >= petEmojis.length) petIndex = petEmojis.length - 1;
         document.getElementById('petAvatar').innerHTML = petEmojis[petIndex];
         
-        // Обычные улучшения
         document.getElementById('upgradeCost').innerHTML = formatNumber(getNormalUpgradeCost());
         document.getElementById('upgradeLevel').innerHTML = normalUpgrade;
         document.getElementById('normalCount').innerHTML = normalUpgrade;
-        
-        // X2 улучшения
         document.getElementById('superUpgradeCost').innerHTML = formatNumber(getSuperUpgradeCost());
         document.getElementById('superUpgradeCount').innerHTML = superUpgrade;
         document.getElementById('superCount').innerHTML = superUpgrade;
-        
-        // Автокликер
         document.getElementById('autoPurchaseCount').innerHTML = autoClickerPurchases;
+        
         if (autoClickerActive && autoClickerEndTime > Date.now()) {
-            let secondsLeft = Math.ceil((autoClickerEndTime - Date.now()) / 1000);
-            let minutes = Math.floor(secondsLeft / 60);
-            let seconds = secondsLeft % 60;
-            document.getElementById('autoClickerStatus').innerHTML = "🤖 АВТОКЛИКЕР АКТИВЕН: " + minutes + " мин " + seconds + " сек";
+            let sec = Math.ceil((autoClickerEndTime - Date.now()) / 1000);
+            document.getElementById('autoClickerStatus').innerHTML = "🤖 Активен: " + Math.floor(sec/60) + " мин " + (sec%60) + " сек";
         } else {
-            document.getElementById('autoClickerStatus').innerHTML = "🤖 Автокликер неактивен";
+            document.getElementById('autoClickerStatus').innerHTML = "🤖 Неактивен";
         }
         
-        // Престиж
         document.getElementById('prestigeLevel').innerHTML = prestigeLevel;
-        const nextPrestigeReq = PRESTIGE_REQUIREMENTS[prestigeLevel + 1];
-        const prestigeBtn = document.getElementById('prestigeBtn');
-        if (nextPrestigeReq && clicks >= nextPrestigeReq && prestigeLevel < 10) {
-            prestigeBtn.innerHTML = "🌟 ПОВЫСИТЬ ПРЕСТИЖ ДО " + (prestigeLevel + 1) + " УРОВНЯ (" + formatNumber(nextPrestigeReq) + ")";
-            prestigeBtn.classList.add('prestige-ready');
-        } else if (nextPrestigeReq) {
-            prestigeBtn.innerHTML = "🌟 ПРЕСТИЖ: нужно " + formatNumber(nextPrestigeReq) + " кликов";
-            prestigeBtn.classList.remove('prestige-ready');
+        let nextReq = PRESTIGE_REQUIREMENTS[prestigeLevel + 1];
+        let pBtn = document.getElementById('prestigeBtn');
+        if (nextReq && clicks >= nextReq && prestigeLevel < 10) {
+            pBtn.innerHTML = "🌟 ПРЕСТИЖ ДО " + (prestigeLevel + 1) + " (" + formatNumber(nextReq) + ")";
+            pBtn.classList.add('prestige-ready');
+        } else if (nextReq) {
+            pBtn.innerHTML = "🌟 ПРЕСТИЖ (" + formatNumber(nextReq) + ")";
+            pBtn.classList.remove('prestige-ready');
         } else {
-            prestigeBtn.innerHTML = "🌟 ПРЕСТИЖ МАКСИМУМ (" + prestigeLevel + "/10)";
-            prestigeBtn.classList.remove('prestige-ready');
+            pBtn.innerHTML = "🌟 ПРЕСТИЖ MAX";
+            pBtn.classList.remove('prestige-ready');
         }
         
-        // Навыки - уровни и блокировка кнопок
-        document.getElementById('skillPowerLvl').innerHTML = skillPower + " / 3";
-        document.getElementById('skillEffLvl').innerHTML = skillEfficiency + " / 3";
-        document.getElementById('skillLuckLvl').innerHTML = skillLuck + " / 3";
+        document.getElementById('skillPowerLvl').innerHTML = skillPower + "/3";
+        document.getElementById('skillEffLvl').innerHTML = skillEfficiency + "/3";
+        document.getElementById('skillLuckLvl').innerHTML = skillLuck + "/3";
         
-        document.getElementById('skillPower1').disabled = (skillPower >= 1);
-        document.getElementById('skillPower2').disabled = (skillPower >= 2);
-        document.getElementById('skillPower3').disabled = (skillPower >= 3);
-        document.getElementById('skillEff1').disabled = (skillEfficiency >= 1);
-        document.getElementById('skillEff2').disabled = (skillEfficiency >= 2);
-        document.getElementById('skillEff3').disabled = (skillEfficiency >= 3);
-        document.getElementById('skillLuck1').disabled = (skillLuck >= 1);
-        document.getElementById('skillLuck2').disabled = (skillLuck >= 2);
-        document.getElementById('skillLuck3').disabled = (skillLuck >= 3);
+        document.getElementById('skillPower1').disabled = skillPower >= 1;
+        document.getElementById('skillPower2').disabled = skillPower >= 2;
+        document.getElementById('skillPower3').disabled = skillPower >= 3;
+        document.getElementById('skillEff1').disabled = skillEfficiency >= 1;
+        document.getElementById('skillEff2').disabled = skillEfficiency >= 2;
+        document.getElementById('skillEff3').disabled = skillEfficiency >= 3;
+        document.getElementById('skillLuck1').disabled = skillLuck >= 1;
+        document.getElementById('skillLuck2').disabled = skillLuck >= 2;
+        document.getElementById('skillLuck3').disabled = skillLuck >= 3;
         
-        // Время в игре
-        const currentTotalTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
-        document.getElementById('playTime').innerHTML = Math.floor(currentTotalTime);
+        let currentTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
+        document.getElementById('playTime').innerHTML = Math.floor(currentTime);
         
-        // Ежедневный бонус таймер
         let lastBonus = localStorage.getItem('dailyBonusTime');
         if (lastBonus === null) lastBonus = 0;
         lastBonus = parseInt(lastBonus);
-        let nextBonusTime = lastBonus + (24 * 60 * 60 * 1000);
-        if (Date.now() >= nextBonusTime) {
+        if (Date.now() >= lastBonus + (24 * 60 * 60 * 1000)) {
             document.getElementById('dailyTimer').innerHTML = "доступен";
         } else {
-            let hoursLeft = Math.ceil((nextBonusTime - Date.now()) / (1000 * 60 * 60));
+            let hoursLeft = Math.ceil((lastBonus + (24 * 60 * 60 * 1000) - Date.now()) / (1000 * 60 * 60));
             document.getElementById('dailyTimer').innerHTML = "через " + hoursLeft + "ч";
         }
         
-        // Активные ускорители
         if (Date.now() < activeBoost.endTime) {
-            let secondsLeft = Math.ceil((activeBoost.endTime - Date.now()) / 1000);
-            document.getElementById('activeBoosts').innerHTML = '<span class="bonus-timer">🔥 x' + activeBoost.multiplier + ' активен: ' + secondsLeft + ' сек</span>';
+            let sec = Math.ceil((activeBoost.endTime - Date.now()) / 1000);
+            document.getElementById('activeBoosts').innerHTML = '<span class="bonus-timer">🔥 x' + activeBoost.multiplier + ': ' + sec + ' сек</span>';
         } else {
             document.getElementById('activeBoosts').innerHTML = '';
         }
         
-        // Достижения прогресс
-        updateAchievementsProgress();
+        if (achNovice) { document.getElementById('achNoviceProgress').innerHTML = "✅ 1000/1000"; document.getElementById('achNoviceStatus').innerHTML = '✅'; }
+        else { document.getElementById('achNoviceProgress').innerHTML = formatNumber(clicks) + "/1000"; document.getElementById('achNoviceStatus').innerHTML = '❌'; }
+        
+        if (achPro) { document.getElementById('achProProgress').innerHTML = "✅ 10000/10000"; document.getElementById('achProStatus').innerHTML = '✅'; }
+        else { document.getElementById('achProProgress').innerHTML = formatNumber(clicks) + "/10000"; document.getElementById('achProStatus').innerHTML = '❌'; }
+        
+        if (achMillion) { document.getElementById('achMillionProgress').innerHTML = "✅ 100K/100K"; document.getElementById('achMillionStatus').innerHTML = '✅'; }
+        else { document.getElementById('achMillionProgress').innerHTML = formatNumber(clicks) + "/100K"; document.getElementById('achMillionStatus').innerHTML = '❌'; }
+        
+        if (achAutoMaster) { document.getElementById('achAutoMasterProgress').innerHTML = "✅ 3/3"; document.getElementById('achAutoMasterStatus').innerHTML = '✅'; }
+        else { document.getElementById('achAutoMasterProgress').innerHTML = autoClickerPurchases + "/3"; document.getElementById('achAutoMasterStatus').innerHTML = '❌'; }
+        
+        if (achCollector) { document.getElementById('achCollectorProgress').innerHTML = "✅ 50/50"; document.getElementById('achCollectorStatus').innerHTML = '✅'; }
+        else { document.getElementById('achCollectorProgress').innerHTML = superUpgrade + "/50"; document.getElementById('achCollectorStatus').innerHTML = '❌'; }
+        
+        if (achPetMaster) { document.getElementById('achPetMasterProgress').innerHTML = "✅ 20/20"; document.getElementById('achPetMasterStatus').innerHTML = '✅'; }
+        else { document.getElementById('achPetMasterProgress').innerHTML = petLevel + "/20"; document.getElementById('achPetMasterStatus').innerHTML = '❌'; }
+        
+        let hours = Math.floor(currentTime / 3600);
+        let mins = Math.floor((currentTime % 3600) / 60);
+        if (achWorkaholic) { document.getElementById('achWorkaholicProgress').innerHTML = "✅ 24ч/24ч"; document.getElementById('achWorkaholicStatus').innerHTML = '✅'; }
+        else { document.getElementById('achWorkaholicProgress').innerHTML = hours + "ч " + mins + "м/24ч"; document.getElementById('achWorkaholicStatus').innerHTML = '❌'; }
     }
 
     // ========================================================================
-    // 18. ПОКАЗ СООБЩЕНИЙ
+    // СООБЩЕНИЯ
     // ========================================================================
     function showMessage(text, type) {
-        const messageDiv = document.getElementById('message');
-        messageDiv.innerHTML = text;
-        messageDiv.className = 'message ' + type;
+        const msg = document.getElementById('message');
+        msg.innerHTML = text;
+        msg.className = 'message ' + type;
         setTimeout(function() {
-            if (messageDiv.innerHTML === text) {
-                messageDiv.innerHTML = '👋 Нажми на красную кнопку, чтобы начать игру!';
-                messageDiv.className = 'message';
+            if (msg.innerHTML === text) {
+                msg.innerHTML = '👋 Нажми КЛИК чтобы начать!';
+                msg.className = 'message';
             }
-        }, 3500);
+        }, 3000);
     }
 
     // ========================================================================
-    // 19. ПРОВЕРКА И ВЫДАЧА ДОСТИЖЕНИЙ
+    // ДОСТИЖЕНИЯ
     // ========================================================================
     function checkAchievements() {
         let changed = false;
-        
-        // Кликер-новичок (1000)
-        if (achNovice === false && clicks >= 1000) {
-            achNovice = true;
-            changed = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: КЛИКЕР-НОВИЧОК! (1000 кликов)", "success");
-        }
-        
-        // Профи (10 000)
-        if (achPro === false && clicks >= 10000) {
-            achPro = true;
-            changed = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: ПРОФИ! (10 000 кликов)", "success");
-        }
-        
-        // Миллионер (100 000)
-        if (achMillion === false && clicks >= 100000) {
-            achMillion = true;
-            changed = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: МИЛЛИОНЕР! +10 к силе клика", "success");
-        }
-        
-        // Мастер автокликера (3 покупки)
-        if (achAutoMaster === false && autoClickerPurchases >= 3) {
-            achAutoMaster = true;
-            changed = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: МАСТЕР АВТОКЛИКЕРА! (3 покупки)", "success");
-        }
-        
-        // Коллекционер (50 X2)
-        if (achCollector === false && superUpgrade >= 50) {
-            achCollector = true;
-            changed = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: КОЛЛЕКЦИОНЕР! x10 к множителю", "success");
-        }
-        
-        // Властелин петов (уровень питомца 20)
-        if (achPetMaster === false && petLevel >= 20) {
-            achPetMaster = true;
-            changed = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: ВЛАСТЕЛИН ПЕТОВ! (уровень питомца 20)", "success");
-        }
-        
-        // Трудоголик (24 часа)
-        const currentTotalTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
-        if (achWorkaholic === false && currentTotalTime >= 86400) {
-            achWorkaholic = true;
-            changed = true;
-            showMessage("🏆 ДОСТИЖЕНИЕ ПОЛУЧЕНО: ТРУДОГОЛИК! (24 часа в игре)", "success");
-        }
-        
-        if (changed) {
-            updateUI();
-            saveGame();
-        }
+        if (!achNovice && clicks >= 1000) { achNovice = true; changed = true; showMessage("🏆 НОВИЧОК! (1000)", "success"); }
+        if (!achPro && clicks >= 10000) { achPro = true; changed = true; showMessage("🏆 ПРОФИ! (10000)", "success"); }
+        if (!achMillion && clicks >= 100000) { achMillion = true; changed = true; showMessage("🏆 МИЛЛИОНЕР! +10 к силе", "success"); }
+        if (!achAutoMaster && autoClickerPurchases >= 3) { achAutoMaster = true; changed = true; showMessage("🏆 МАСТЕР АВТОКЛИКЕРА!", "success"); }
+        if (!achCollector && superUpgrade >= 50) { achCollector = true; changed = true; showMessage("🏆 КОЛЛЕКЦИОНЕР! x10", "success"); }
+        let currentTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
+        if (!achWorkaholic && currentTime >= 86400) { achWorkaholic = true; changed = true; showMessage("🏆 ТРУДОГОЛИК! (24 часа)", "success"); }
+        if (changed) { updateUI(); saveGame(); }
     }
 
     // ========================================================================
-    // 20. СОХРАНЕНИЕ И ЗАГРУЗКА (localStorage)
+    // СОХРАНЕНИЕ
     // ========================================================================
     function saveGame() {
-        const currentTotalTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
-        
-        const saveData = {
-            clicks: Math.floor(clicks),
-            normalUpgrade: normalUpgrade,
-            superUpgrade: superUpgrade,
-            autoClickerPurchases: autoClickerPurchases,
-            autoClickerEndTime: autoClickerEndTime,
-            autoClickerActive: autoClickerActive,
-            prestigeLevel: prestigeLevel,
-            prestigeBonus: prestigeBonus,
-            skillPower: skillPower,
-            skillEfficiency: skillEfficiency,
-            skillLuck: skillLuck,
-            totalPlayTime: currentTotalTime,
-            achNovice: achNovice,
-            achPro: achPro,
-            achMillion: achMillion,
-            achAutoMaster: achAutoMaster,
-            achWorkaholic: achWorkaholic,
-            achCollector: achCollector,
-            achPetMaster: achPetMaster,
-            petLevel: petLevel,
-            petClicks: petClicks,
-            activeBoost: activeBoost,
-            lastSaveTime: Date.now()
-        };
-        
-        localStorage.setItem('clickerCompleteSave', JSON.stringify(saveData));
+        const currentTime = totalPlayTime + (Date.now() - sessionStartTime) / 1000;
+        localStorage.setItem('clickerSave', JSON.stringify({
+            clicks, normalUpgrade, superUpgrade, autoClickerPurchases, autoClickerEndTime, autoClickerActive,
+            prestigeLevel, prestigeBonus, skillPower, skillEfficiency, skillLuck, totalPlayTime: currentTime,
+            achNovice, achPro, achMillion, achAutoMaster, achWorkaholic, achCollector, achPetMaster,
+            petLevel, petClicks, activeBoost, lastSaveTime: Date.now()
+        }));
         lastSaveTime = Date.now();
     }
     
     function loadGame() {
-        const saved = localStorage.getItem('clickerCompleteSave');
+        const saved = localStorage.getItem('clickerSave');
         if (saved) {
             try {
-                const data = JSON.parse(saved);
-                clicks = data.clicks || 0;
-                normalUpgrade = data.normalUpgrade || 0;
-                superUpgrade = data.superUpgrade || 0;
-                autoClickerPurchases = data.autoClickerPurchases || 0;
-                autoClickerEndTime = data.autoClickerEndTime || 0;
-                prestigeLevel = data.prestigeLevel || 0;
-                prestigeBonus = data.prestigeBonus || 1;
-                skillPower = data.skillPower || 0;
-                skillEfficiency = data.skillEfficiency || 0;
-                skillLuck = data.skillLuck || 0;
-                totalPlayTime = data.totalPlayTime || 0;
-                achNovice = data.achNovice || false;
-                achPro = data.achPro || false;
-                achMillion = data.achMillion || false;
-                achAutoMaster = data.achAutoMaster || false;
-                achWorkaholic = data.achWorkaholic || false;
-                achCollector = data.achCollector || false;
-                achPetMaster = data.achPetMaster || false;
-                petLevel = data.petLevel || 0;
-                petClicks = data.petClicks || 0;
-                if (data.activeBoost) {
-                    activeBoost = data.activeBoost;
-                }
-                lastSaveTime = data.lastSaveTime || Date.now();
+                const d = JSON.parse(saved);
+                clicks = d.clicks || 0;
+                normalUpgrade = d.normalUpgrade || 0;
+                superUpgrade = d.superUpgrade || 0;
+                autoClickerPurchases = d.autoClickerPurchases || 0;
+                autoClickerEndTime = d.autoClickerEndTime || 0;
+                prestigeLevel = d.prestigeLevel || 0;
+                prestigeBonus = d.prestigeBonus || 1;
+                skillPower = d.skillPower || 0;
+                skillEfficiency = d.skillEfficiency || 0;
+                skillLuck = d.skillLuck || 0;
+                totalPlayTime = d.totalPlayTime || 0;
+                achNovice = d.achNovice || false;
+                achPro = d.achPro || false;
+                achMillion = d.achMillion || false;
+                achAutoMaster = d.achAutoMaster || false;
+                achWorkaholic = d.achWorkaholic || false;
+                achCollector = d.achCollector || false;
+                achPetMaster = d.achPetMaster || false;
+                petLevel = d.petLevel || 0;
+                petClicks = d.petClicks || 0;
+                if (d.activeBoost) activeBoost = d.activeBoost;
+                lastSaveTime = d.lastSaveTime || Date.now();
                 
-                // Восстанавливаем активный автокликер, если он должен работать
                 if (autoClickerEndTime > Date.now()) {
                     autoClickerActive = true;
-                    if (autoClickerInterval !== null) {
-                        clearInterval(autoClickerInterval);
-                    }
-                    autoClickerInterval = setInterval(function() {
-                        const now = Date.now();
-                        if (now >= autoClickerEndTime) {
+                    if (autoClickerInterval) clearInterval(autoClickerInterval);
+                    autoClickerInterval = setInterval(() => {
+                        if (Date.now() >= autoClickerEndTime) {
                             clearInterval(autoClickerInterval);
                             autoClickerInterval = null;
                             autoClickerActive = false;
                             updateUI();
                         } else {
-                            clicks = clicks + getTotalClickPower();
+                            clicks += getTotalClickPower();
                             updateUI();
                         }
                     }, 1000);
-                } else {
-                    autoClickerActive = false;
                 }
-                
                 sessionStartTime = Date.now();
                 updateUI();
                 checkOfflineProgress();
                 claimOfflineIfExists();
-            } catch(e) {
-                console.error("Ошибка загрузки сохранения:", e);
-                resetGame();
-            }
-        } else {
-            resetGame();
-        }
+            } catch(e) { resetGame(); }
+        } else { resetGame(); }
     }
     
     function resetGame() {
-        clicks = 0;
-        normalUpgrade = 0;
-        superUpgrade = 0;
-        autoClickerPurchases = 0;
-        autoClickerActive = false;
-        autoClickerEndTime = 0;
-        prestigeLevel = 0;
-        prestigeBonus = 1;
-        skillPower = 0;
-        skillEfficiency = 0;
-        skillLuck = 0;
-        totalPlayTime = 0;
-        achNovice = false;
-        achPro = false;
-        achMillion = false;
-        achAutoMaster = false;
-        achWorkaholic = false;
-        achCollector = false;
-        achPetMaster = false;
-        petLevel = 0;
-        petClicks = 0;
-        activeBoost = { multiplier: 1, endTime: 0 };
-        
-        if (autoClickerInterval !== null) {
-            clearInterval(autoClickerInterval);
-            autoClickerInterval = null;
-        }
-        
-        sessionStartTime = Date.now();
-        lastSaveTime = Date.now();
+        clicks = 0; normalUpgrade = 0; superUpgrade = 0; autoClickerPurchases = 0;
+        autoClickerActive = false; autoClickerEndTime = 0; prestigeLevel = 0; prestigeBonus = 1;
+        skillPower = 0; skillEfficiency = 0; skillLuck = 0; totalPlayTime = 0;
+        achNovice = false; achPro = false; achMillion = false; achAutoMaster = false;
+        achWorkaholic = false; achCollector = false; achPetMaster = false;
+        petLevel = 0; petClicks = 0; activeBoost = { multiplier: 1, endTime: 0 };
+        if (autoClickerInterval) { clearInterval(autoClickerInterval); autoClickerInterval = null; }
+        sessionStartTime = Date.now(); lastSaveTime = Date.now();
         updateUI();
     }
 
     // ========================================================================
-    // 21. ИНИЦИАЛИЗАЦИЯ И ОБРАБОТЧИКИ СОБЫТИЙ
+    // ИНИЦИАЛИЗАЦИЯ
     // ========================================================================
     function init() {
         loadGame();
         
-        // Главная кнопка клика
         document.getElementById('clickBtn').addEventListener('click', handleClick);
-        
-        // Кнопка сохранения
-        document.getElementById('saveBtn').addEventListener('click', function() {
-            saveGame();
-            showMessage("💾 ИГРА СОХРАНЕНА! Все данные записаны.", "success");
-        });
-        
-        // Престиж
+        document.getElementById('saveBtn').addEventListener('click', function() { saveGame(); showMessage("💾 Сохранено!", "success"); });
         document.getElementById('prestigeBtn').addEventListener('click', doPrestige);
-        
-        // Ежедневный бонус
         document.getElementById('dailyBonusBtn').addEventListener('click', claimDailyBonus);
-        
-        // Улучшения
         document.getElementById('upgradeBtn').addEventListener('click', buyNormalUpgrade);
         document.getElementById('superUpgradeBtn').addEventListener('click', buySuperUpgrade);
         document.getElementById('autoClickerBtn').addEventListener('click', buyAutoClicker);
+        document.getElementById('boostX2Btn').addEventListener('click', function() { activateBoost(2, 30, 50000); });
+        document.getElementById('boostX5Btn').addEventListener('click', function() { activateBoost(5, 10, 500000); });
+        document.getElementById('boostX10Btn').addEventListener('click', function() { activateBoost(10, 5, 5000000); });
         
-        // Временные ускорители
-        document.getElementById('boostX2Btn').addEventListener('click', function() {
-            activateBoost(2, 30, 50000);
-        });
-        document.getElementById('boostX5Btn').addEventListener('click', function() {
-            activateBoost(5, 10, 500000);
-        });
-        document.getElementById('boostX10Btn').addEventListener('click', function() {
-            activateBoost(10, 5, 5000000);
-        });
+        document.getElementById('skillPower1').addEventListener('click', function() { if (skillPower < 1) buySkill(1, 1000000, function() { skillPower = 1; }, "+1 сила"); });
+        document.getElementById('skillPower2').addEventListener('click', function() { if (skillPower < 2) buySkill(2, 10000000, function() { skillPower = 2; }, "+2 сила"); });
+        document.getElementById('skillPower3').addEventListener('click', function() { if (skillPower < 3) buySkill(3, 100000000, function() { skillPower = 3; }, "+3 сила"); });
+        document.getElementById('skillEff1').addEventListener('click', function() { if (skillEfficiency < 1) buySkill(1, 5000000, function() { skillEfficiency = 1; }, "x2 оффлайн"); });
+        document.getElementById('skillEff2').addEventListener('click', function() { if (skillEfficiency < 2) buySkill(2, 50000000, function() { skillEfficiency = 2; }, "x4 оффлайн"); });
+        document.getElementById('skillEff3').addEventListener('click', function() { if (skillEfficiency < 3) buySkill(3, 500000000, function() { skillEfficiency = 3; }, "x8 оффлайн"); });
+        document.getElementById('skillLuck1').addEventListener('click', function() { if (skillLuck < 1) buySkill(1, 2000000, function() { skillLuck = 1; }, "+5% крит"); });
+        document.getElementById('skillLuck2').addEventListener('click', function() { if (skillLuck < 2) buySkill(2, 20000000, function() { skillLuck = 2; }, "+10% крит"); });
+        document.getElementById('skillLuck3').addEventListener('click', function() { if (skillLuck < 3) buySkill(3, 200000000, function() { skillLuck = 3; }, "+20% крит"); });
         
-        // Навыки - ветка Силы
-        document.getElementById('skillPower1').addEventListener('click', buySkillPower1);
-        document.getElementById('skillPower2').addEventListener('click', buySkillPower2);
-        document.getElementById('skillPower3').addEventListener('click', buySkillPower3);
-        
-        // Навыки - ветка Эффективности
-        document.getElementById('skillEff1').addEventListener('click', buySkillEff1);
-        document.getElementById('skillEff2').addEventListener('click', buySkillEff2);
-        document.getElementById('skillEff3').addEventListener('click', buySkillEff3);
-        
-        // Навыки - ветка Удачи
-        document.getElementById('skillLuck1').addEventListener('click', buySkillLuck1);
-        document.getElementById('skillLuck2').addEventListener('click', buySkillLuck2);
-        document.getElementById('skillLuck3').addEventListener('click', buySkillLuck3);
-        
-        // Автоматическая проверка достижений (раз в секунду)
-        setInterval(function() {
-            checkAchievements();
-        }, 1000);
-        
-        // Автообновление интерфейса (раз в секунду)
-        setInterval(function() {
-            updateUI();
-        }, 1000);
-        
-        // Автосохранение каждые 10 секунд
-        setInterval(function() {
-            saveGame();
-        }, 10000);
-        
-        // Сохранение перед закрытием страницы
-        window.addEventListener('beforeunload', function() {
-            saveGame();
-        });
-        
-        // Проверка античитера каждые 100 миллисекунд (для снятия блокировки)
-        setInterval(function() {
-            if (isBlocked && Date.now() >= blockEndTime) {
-                isBlocked = false;
-                document.getElementById('clickBtn').classList.remove('disabled');
-            }
-        }, 100);
+        setInterval(function() { checkAchievements(); }, 1000);
+        setInterval(function() { updateUI(); }, 1000);
+        setInterval(function() { saveGame(); }, 10000);
+        window.addEventListener('beforeunload', function() { saveGame(); });
+        setInterval(function() { if (isBlocked && Date.now() >= blockEndTime) { isBlocked = false; document.getElementById('clickBtn').classList.remove('disabled'); } }, 100);
     }
     
-    // ЗАПУСК ИГРЫ ПОСЛЕ ЗАГРУЗКИ СТРАНИЦЫ
     init();
 </script>
 </body>
